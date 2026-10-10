@@ -1,5 +1,12 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { availableBundles, brl, getBundle, type Bundle, type BundleId } from "@/lib/bundles";
+import {
+  availableBundles,
+  brl,
+  FREE_SHIPPING_LABEL,
+  getBundle,
+  type Bundle,
+  type BundleId,
+} from "@/lib/bundles";
 import { brand } from "@/lib/brand";
 import { metaTrack } from "@/lib/meta-pixel";
 import imgGota from "@/assets/gota.webp";
@@ -240,7 +247,7 @@ function ProductBlock({ bundle, onSelect }: { bundle: Bundle; onSelect: (id: Bun
           </div>
           <div>
             <Icon d="M3 7h13v10H3zM16 10h4l1 3v4h-5" />
-            <span>Frete grátis e envio em até 1 dia útil, com rastreio.</span>
+            <span>{FREE_SHIPPING_LABEL} e envio em até 1 dia útil, com rastreio.</span>
           </div>
           <div>
             <Icon d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-5A8 8 0 1 1 21 12z" />
@@ -312,11 +319,11 @@ function ShippingEstimate() {
       const [a, b] = r.uf === ORIGIN_UF ? [1, 3] : (ETA[r.uf] ?? [5, 10]);
       setOut(
         <>
-          {r.localidade}/{r.uf}: <b>frete grátis</b>, entrega em {a} a {b} dias úteis.
+          {r.localidade}/{r.uf}: entrega em {a} a {b} dias úteis. <b>{FREE_SHIPPING_LABEL}.</b>
         </>,
       );
     } catch {
-      setOut("Não foi possível consultar agora. Frete grátis para todo o Brasil.");
+      setOut(`Não foi possível consultar agora. ${FREE_SHIPPING_LABEL}.`);
     }
   };
   return (

@@ -13,7 +13,7 @@ export const Route = createFileRoute("/produto")({
       {
         name: "description",
         content:
-          "CardioChek PA para usar em casa: colesterol total, HDL, LDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Kits com tiras, frete grátis e 7 dias para devolver.",
+          "CardioChek PA para usar em casa: colesterol total, HDL, LDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Kits com tiras, frete grátis acima de R$ 90 e 7 dias para devolver.",
       },
       { property: "og:title", content: "Medidor de Colesterol CardioChek PA" },
       { property: "og:url", content: "/produto" },

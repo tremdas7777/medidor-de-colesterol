@@ -45,7 +45,7 @@ export const Route = createFileRoute("/checkout")({
       { property: "og:title", content: "Checkout Seguro | CardioMed" },
       {
         property: "og:description",
-        content: `Pagamento seguro via Pix. ${FREE_SHIPPING_LABEL} para todo o Brasil.`,
+        content: `Pagamento seguro via Pix. ${FREE_SHIPPING_LABEL}.`,
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -379,7 +379,11 @@ function Page() {
             onChange={(e) => setAddr({ ...addr, complemento: e.target.value })}
           />
           <p className="pt-2 text-base font-medium">Escolha o frete:</p>
-          <FreeShippingProgress bundle={bundle} subtotal={subtotal} />
+          <FreeShippingProgress
+            bundle={bundle}
+            subtotal={subtotal}
+            freteCost={FRETES.find((f) => f.id === "padrao")?.price}
+          />
           {FRETES.map(({ id: v, name: t, eta: d, price }) => {
             const locked = v === "gratis" && !freeEligible;
             const p = locked ? `Acima de ${brl(FREE_SHIPPING_MIN)}` : price ? brl(price) : "Grátis";

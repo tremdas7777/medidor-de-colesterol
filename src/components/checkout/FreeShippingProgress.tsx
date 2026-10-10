@@ -14,15 +14,22 @@ export function FreeShippingProgress({
   bundle,
   subtotal,
   className,
+  offerUpgrade = true,
+  freteCost,
 }: {
   bundle: Bundle;
   subtotal: number;
   className?: string;
+  /** Mostra a oferta de trocar para o kit que libera o frete (etapa do frete). */
+  offerUpgrade?: boolean;
+  /** Valor do frete que o cliente pagaria sem o upgrade (para comparar). */
+  freteCost?: number;
 }) {
   const eligible = isFreeShippingEligible(subtotal);
   const pct = Math.min(100, Math.round((subtotal / FREE_SHIPPING_MIN) * 100));
   const upgrade = getUpgradeBundle(bundle);
-  const showUpgrade = !eligible && upgrade && isFreeShippingEligible(upgrade.price);
+  const showUpgrade = offerUpgrade && !eligible && upgrade && isFreeShippingEligible(upgrade.price);
+  const diff = upgrade ? Math.round((upgrade.price - bundle.price) * 100) / 100 : 0;
 
   return (
     <div
@@ -58,19 +65,28 @@ export function FreeShippingProgress({
       {showUpgrade && (
         <div className="mt-3 rounded-md border border-[var(--ck-ok)]/30 bg-white p-3">
           <p className="text-[13px] leading-snug">
-            Leve o <b>{upgrade.name}</b> por{" "}
-            <b className="text-[var(--ck-ok)]">{brl(upgrade.price)}</b>
-            {upgrade.compareAtPrice && upgrade.compareAtPrice > upgrade.price && (
-              <> — economize {brl(upgrade.compareAtPrice - upgrade.price)}</>
-            )}{" "}
-            e ganhe <b>FRETE GRÁTIS</b>.
+            Por só <b className="text-[var(--ck-ok)]">+{brl(diff)}</b> você leva o{" "}
+            <b>{upgrade.name}</b> ({upgrade.description.toLowerCase()})
+            {freteCost ? (
+              <>
+                {" "}
+                e <b>não paga os {brl(freteCost)} de frete</b>.
+              </>
+            ) : (
+              <>
+                {" "}
+                e ganha <b>FRETE GRÁTIS</b>.
+              </>
+            )}
           </p>
           <Link
             to="/checkout"
             search={{ plano: upgrade.id }}
+            replace
+            resetScroll={false}
             className="mt-2 flex w-full items-center justify-center gap-2 rounded-md bg-[var(--ck-ok)] px-3 py-2.5 text-[13px] font-bold text-white transition hover:opacity-90"
           >
-            <Truck className="h-4 w-4" /> Quero o {upgrade.name} com frete grátis
+            <Truck className="h-4 w-4" /> Trocar para o {upgrade.name} com frete grátis
           </Link>
         </div>
       )}

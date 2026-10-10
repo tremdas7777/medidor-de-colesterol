@@ -11,8 +11,7 @@ export function CardioHeader() {
       <div className="cm-util">
         <div className="wrap">
           <span>
-            {FREE_SHIPPING_LABEL.replace(" para todo o Brasil", "")}
-            <span className="hm"> para todo o Brasil</span> · <b>Pix com aprovação na hora</b>
+            {FREE_SHIPPING_LABEL} · <b>Pix com aprovação na hora</b>
           </span>
           <div className="r">
             <span>Nota fiscal em todos os pedidos</span>

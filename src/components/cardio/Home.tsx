@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { brl, DEFAULT_BUNDLE_ID, getBundle } from "@/lib/bundles";
+import {
+  brl,
+  bundleShippingLabel,
+  DEFAULT_BUNDLE_ID,
+  FREE_SHIPPING_LABEL,
+  getBundle,
+} from "@/lib/bundles";
 import { metaTrack } from "@/lib/meta-pixel";
 import imgCasal from "@/assets/casal.webp";
 import imgPensativo from "@/assets/pensativo.webp";
@@ -93,7 +99,9 @@ function Hero() {
       tab: "A oferta",
       body: (
         <>
-          <span className="kicker">{bundle.name} · frete grátis</span>
+          <span className="kicker">
+            {bundle.name} · {bundleShippingLabel(bundle).toLowerCase()}
+          </span>
           <h2>
             Uma gota. <em>Seis resultados.</em> Para a família toda.
           </h2>
@@ -181,7 +189,7 @@ export function CardioHome() {
           "Triglicérides",
           "Glicose",
           "Resultado em 90 segundos",
-          "Frete grátis",
+          FREE_SHIPPING_LABEL,
           "7 dias para devolver",
         ]}
       />

@@ -161,6 +161,6 @@ export const FAQ = [
   },
   {
     q: "Como funciona o pagamento e a entrega?",
-    a: "O pagamento é por Pix, com aprovação na hora. Despachamos em até 1 dia útil, com frete grátis e código de rastreio.",
+    a: "O pagamento é por Pix, com aprovação na hora. Despachamos em até 1 dia útil, com código de rastreio. O frete é grátis em compras acima de R$ 90.",
   },
 ] as const;

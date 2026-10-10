@@ -449,7 +449,7 @@ export function KitCards() {
           Escolha o seu e comece a medir esta semana.
         </h2>
         <p className="lead" data-reveal>
-          Frete grátis para todo o Brasil, Pix com aprovação na hora e 7 dias para devolver.
+          Frete grátis acima de R$ 90, Pix com aprovação na hora e 7 dias para devolver.
         </p>
         <div className="kitcards">
           {availableBundles.map((b, i) => {
@@ -907,8 +907,8 @@ export function Closing({ bundle, target = "checkout" }: { bundle: Bundle; targe
             Daqui a 90 segundos você pode saber o que o exame do ano que vem diria.
           </h2>
           <p className="lead">
-            Frete grátis, Pix com aprovação na hora e 7 dias para devolver. O risco de testar é
-            nosso.
+            Frete grátis acima de R$ 90, Pix com aprovação na hora e 7 dias para devolver. O risco
+            de testar é nosso.
           </p>
         </div>
         <div className="closing-card" data-reveal>

@@ -5,14 +5,15 @@ export type BundleId = "1" | "2" | "3";
 
 export const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-/** Valor mínimo (produtos, sem frete) para liberar o frete grátis. Todos os kits passam dele. */
-export const FREE_SHIPPING_MIN = 0;
-export const FREE_SHIPPING_LABEL = "Frete grátis para todo o Brasil";
+/** Valor mínimo (produtos + order bump, sem frete) para liberar o frete grátis. */
+export const FREE_SHIPPING_MIN = 90;
+export const FREE_SHIPPING_LABEL = `Frete grátis acima de ${brl(FREE_SHIPPING_MIN)}`;
 
 export const isFreeShippingEligible = (subtotal: number) => subtotal >= FREE_SHIPPING_MIN;
 
-/** Selo de frete por kit. */
-export const bundleShippingLabel = (_b: { price: number }) => FREE_SHIPPING_LABEL;
+/** Selo de frete por kit: grátis quando o próprio kit já passa do mínimo. */
+export const bundleShippingLabel = (b: { price: number }) =>
+  isFreeShippingEligible(b.price) ? "Frete grátis" : FREE_SHIPPING_LABEL;
 
 export type Bundle = {
   id: BundleId;
@@ -58,8 +59,7 @@ export const bundles: Bundle[] = [
     short: "Só o aparelho",
     units: 1,
     strips: 0,
-    price: 5240,
-    compareAtPrice: 7490,
+    price: 69.9,
     priceNote: "Para quem já tem tiras",
     description: "Analisador, para quem já tem tiras e lancetas",
     audience: "Já tem tiras em casa",
@@ -83,8 +83,7 @@ export const bundles: Bundle[] = [
     short: "Kit Essencial",
     units: 1,
     strips: 25,
-    price: 6490,
-    compareAtPrice: 9990,
+    price: 99.9,
     priceNote: "Aparelho + 25 tiras + lancetas",
     description: "Aparelho + 25 tiras + lancetas e capilares",
     audience: "Para você acompanhar",
@@ -110,8 +109,7 @@ export const bundles: Bundle[] = [
     short: "Kit Família",
     units: 1,
     strips: 75,
-    price: 8990,
-    compareAtPrice: 14990,
+    price: 129.9,
     priceNote: "Aparelho + 75 tiras + lancetas e capilares",
     description: "Aparelho + 75 tiras + lancetas, capilares e estojo",
     audience: "Para a casa toda",

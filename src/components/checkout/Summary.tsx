@@ -19,6 +19,7 @@ function Body(p: Props) {
         bundle={bundle}
         subtotal={bundle.price + bumpsTotal(bumps)}
         className="mb-5"
+        offerUpgrade={false}
       />
       <div className="space-y-2 text-[13px]">
         <div className="flex justify-between">
