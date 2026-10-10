@@ -276,7 +276,8 @@ export function StepByStep() {
           Como medir em casa, do começo ao resultado.
         </h2>
         <p className="lead" data-reveal>
-          Seis passos simples. Na primeira vez leva uns 5 minutos. Depois, você faz no automático.
+          Oito passos, do jeito que o fabricante orienta. Na primeira vez leva uns 5 minutos.
+          Depois, você faz no automático.
         </p>
         <div className="steps-grid">
           {STEPS.map((s, i) => (
@@ -290,9 +291,16 @@ export function StepByStep() {
                 <div className="ph">
                   <img src={s.img} alt={s.title} loading="lazy" />
                 </div>
+              ) : "illustration" in s ? (
+                <div className="ph illus">
+                  <LancetIllustration />
+                </div>
               ) : (
                 <div className={`ph devph ${"device" in s ? s.device : ""}`}>
                   <Device />
+                  {"device" in s && s.device === "chip" && (
+                    <span className="arrow down" aria-hidden />
+                  )}
                   {"device" in s && s.device === "strip" && <span className="arrow" aria-hidden />}
                   {"device" in s && s.device === "result" && <span className="ring" aria-hidden />}
                 </div>
@@ -306,6 +314,86 @@ export function StepByStep() {
         </div>
       </div>
     </section>
+  );
+}
+
+/** Onde furar o dedo (como no desenho do guia do fabricante): lateral da polpa, nunca centro ou unha. */
+function LancetIllustration() {
+  return (
+    <svg
+      viewBox="0 0 400 300"
+      role="img"
+      aria-label="Fure a lateral da ponta do dedo, longe do centro e da unha"
+    >
+      <rect width="400" height="300" fill="#f4f2ed" />
+      {/* dedo visto pela palma */}
+      <path
+        d="M150 300 V120 C150 62 250 62 250 120 V300"
+        fill="#f1cdb3"
+        stroke="#c99a7c"
+        strokeWidth="2"
+      />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <path
+          key={i}
+          d={`M${172 - i * 4} ${150 + i * 9} Q200 ${118 + i * 9} ${228 + i * 4} ${150 + i * 9}`}
+          fill="none"
+          stroke="#d9ad90"
+          strokeWidth="1.4"
+        />
+      ))}
+      <line x1="150" y1="212" x2="250" y2="212" stroke="#d9ad90" strokeWidth="1.6" />
+      {/* centro: evitar */}
+      <g transform="translate(200 128)">
+        <circle r="13" fill="none" stroke="#9b9993" strokeWidth="2" strokeDasharray="4 3" />
+        <path
+          d="M-6 -6 L6 6 M6 -6 L-6 6"
+          stroke="#9b9993"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+        />
+      </g>
+      {/* laterais: onde furar */}
+      <circle cx="158" cy="132" r="9" fill="#c4161c" opacity=".18" />
+      <circle cx="242" cy="132" r="9" fill="#c4161c" opacity=".18" />
+      <circle cx="242" cy="132" r="4.5" fill="#c4161c" />
+      {/* lanceta chegando pela lateral */}
+      <g transform="translate(262 132)">
+        <rect
+          x="18"
+          y="-11"
+          width="70"
+          height="22"
+          rx="5"
+          fill="#fff"
+          stroke="#16181b"
+          strokeWidth="2"
+        />
+        <rect x="6" y="-4" width="12" height="8" rx="2" fill="#16181b" />
+        <path d="M-2 0 H6" stroke="#16181b" strokeWidth="2" />
+      </g>
+      <g fontFamily="IBM Plex Sans, sans-serif" fontSize="16" fill="#3c4249">
+        <text x="300" y="176" textAnchor="middle">
+          lateral da ponta
+        </text>
+        <text x="300" y="196" textAnchor="middle" fill="#c4161c" fontWeight="600">
+          fure aqui
+        </text>
+        <text x="96" y="92" textAnchor="middle">
+          centro e unha:
+        </text>
+        <text x="96" y="112" textAnchor="middle" fontWeight="600">
+          evite
+        </text>
+      </g>
+      <path
+        d="M118 100 Q160 104 186 124"
+        fill="none"
+        stroke="#9b9993"
+        strokeWidth="1.4"
+        strokeDasharray="3 3"
+      />
+    </svg>
   );
 }
 

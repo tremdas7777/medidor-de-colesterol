@@ -9,7 +9,7 @@ import imgAcademia from "@/assets/academia.webp";
 import imgDieta from "@/assets/dieta.webp";
 import imgCasal from "@/assets/casal.webp";
 import imgMaos from "@/assets/passo-maos.webp";
-import imgLanceta from "@/assets/passo-lanceta.webp";
+import imgAlcool from "@/assets/passo-alcool.webp";
 import imgCapilar from "@/assets/passo-capilar.webp";
 import imgAnotar from "@/assets/passo-anotar.webp";
 
@@ -53,39 +53,54 @@ export const PERSONAS = [
   },
 ] as const;
 
-/** Passo a passo de uma medição. `img: null` = passo com o aparelho (usa a foto oficial animada). */
+/**
+ * Passo a passo de uma medição, conforme o guia do usuário do CardioChek PA (PTS Diagnostics).
+ * `img: null` = passo com o aparelho (foto oficial animada) ou ilustração.
+ */
 export const STEPS = [
   {
-    img: imgMaos,
-    title: "Lave e seque as mãos",
-    text: "Água morna ajuda o sangue a circular na ponta do dedo. Seque bem: água dilui a gota.",
+    img: null,
+    device: "chip",
+    title: "Prepare o aparelho",
+    text: "Coloque o aparelho numa mesa firme, longe de sol direto. Encaixe no topo o chip MEMo que vem na caixa de tiras: ele ajusta o aparelho para aquele lote.",
   },
   {
     img: null,
     device: "strip",
-    title: "Ligue e coloque a tira",
-    text: "Encaixe a tira de painel lipídico na entrada da parte de baixo. O aparelho reconhece o teste pelo chip do lote.",
+    title: "Coloque a tira",
+    text: "Encaixe a tira até o fim na entrada de baixo. Quando a tela mostrar APPLY SAMPLE, o aparelho está pronto para a gota.",
   },
   {
-    img: imgLanceta,
-    title: "Fure a ponta do dedo",
-    text: "Use a lanceta descartável na lateral da ponta do dedo. É uma picada rápida, bem menor que a de um exame de veia.",
+    img: imgMaos,
+    title: "Lave e aqueça as mãos",
+    text: "Lave com água morna e sabão e seque bem. Deixe o braço um pouco para baixo: isso ajuda o sangue a chegar na ponta do dedo.",
+  },
+  {
+    img: imgAlcool,
+    title: "Limpe com álcool",
+    text: "Passe o lenço com álcool na ponta do dedo e espere secar por completo. Dedo molhado dilui a gota e altera o resultado.",
+  },
+  {
+    img: null,
+    illustration: "lancet",
+    title: "Fure a lateral do dedo",
+    text: "Use uma lanceta descartável na lateral da ponta do dedo, não no centro nem perto da unha. Dói menos e a gota se forma melhor.",
   },
   {
     img: imgCapilar,
-    title: "Colete uma gota",
-    text: "Encoste o capilar na gota (40µL) e aplique na tira. Só isso de sangue.",
+    title: "Colete a segunda gota",
+    text: "Limpe a primeira gota com gaze. Com o dedo para baixo, encoste o capilar na segunda gota até o sangue chegar à faixa preta, sem bolhas.",
   },
   {
     img: null,
     device: "result",
-    title: "Leia o resultado em até 90s",
-    text: "Colesterol total, HDL, triglicérides e glicose aparecem na tela. LDL e razão CT/HDL são calculados na hora.",
+    title: "Aplique e espere 90 segundos",
+    text: "Segure o capilar sobre a janela da tira, sem encostar, e aperte o êmbolo devagar. Em cerca de 90 segundos os resultados aparecem na tela.",
   },
   {
     img: imgAnotar,
     title: "Anote e leve ao médico",
-    text: "Registre a data e os números. Com o histórico na mão, a conversa com o médico rende muito mais.",
+    text: "O aparelho guarda até 30 resultados na memória, com data e hora. Anote também e leve o histórico na próxima consulta.",
   },
 ] as const;
 
