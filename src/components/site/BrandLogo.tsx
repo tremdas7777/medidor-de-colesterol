@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { HeartMark } from "./HeartMark";
 
 /** Logo em texto da CardioMed (troque por uma imagem quando houver o arquivo do logo). */
 export function BrandLogo({ className }: { className?: string }) {
@@ -11,7 +12,7 @@ export function BrandLogo({ className }: { className?: string }) {
       style={{ fontFamily: "Archivo, system-ui, sans-serif" }}
       aria-label="CardioMed"
     >
-      <span aria-hidden className="inline-block h-[0.35em] w-[0.35em] bg-[#c4161c]" />
+      <HeartMark size={40} className="h-[0.9em] w-[0.9em]" />
       CardioMed
     </span>
   );

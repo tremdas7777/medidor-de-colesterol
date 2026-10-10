@@ -1,0 +1,26 @@
+/** Marca da CardioMed: coração vermelho com a linha de batimento (ECG) passando por dentro. */
+export function HeartMark({ size = 30, className }: { size?: number; className?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
+      className={className}
+      aria-hidden
+      focusable="false"
+    >
+      <path
+        d="M16 28.5s-11-6.6-13.6-13.4C.6 10.3 3.6 4.5 9.2 4.5c3 0 5.2 1.7 6.8 4.2 1.6-2.5 3.8-4.2 6.8-4.2 5.6 0 8.6 5.8 6.8 10.6C27 21.9 16 28.5 16 28.5z"
+        fill="#c4161c"
+      />
+      <polyline
+        points="5,15.5 9.6,15.5 11.8,11 14.8,21 17.8,9.5 20,15.5 27,15.5"
+        fill="none"
+        stroke="#fff"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

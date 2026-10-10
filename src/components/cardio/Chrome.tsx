@@ -1,11 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { brand } from "@/lib/brand";
-import { DEFAULT_BUNDLE_ID, FREE_SHIPPING_LABEL, getBundle } from "@/lib/bundles";
+import { FREE_SHIPPING_LABEL } from "@/lib/bundles";
+import { HeartMark } from "@/components/site/HeartMark";
 import "./cardio.css";
 
 /** Barra fina do topo + cabeçalho. Fica no topo de todas as páginas da vitrine. */
 export function CardioHeader() {
-  const b = getBundle(DEFAULT_BUNDLE_ID);
   return (
     <div className="cm">
       <div className="cm-util">
@@ -22,20 +22,20 @@ export function CardioHeader() {
       </div>
       <header className="cm-hdr">
         <div className="wrap">
-          <Link to="/" className="logo" aria-label={`${brand.name}, início`}>
-            <i />
-            {brand.name}
-          </Link>
-          <nav aria-label="Principal">
+          <nav aria-label="Principal" className="l">
             <a href="/#como">Como funciona</a>
             <a href="/#para-quem">Para quem é</a>
             <a href="/produto">O aparelho</a>
+          </nav>
+          <Link to="/" className="logo" aria-label={`${brand.name}, início`}>
+            <HeartMark className="hm-mark" />
+            {brand.name}
+          </Link>
+          <nav aria-label="Atalhos" className="r">
             <a href="/#kits">Kits</a>
+            <Link to="/faq">Dúvidas</Link>
             <Link to="/rastreio">Rastrear pedido</Link>
           </nav>
-          <a className="btn btn-buy buy" href={`/produto?plano=${b.id}`}>
-            Comprar
-          </a>
         </div>
       </header>
     </div>
@@ -52,7 +52,7 @@ export function CardioFooter() {
           <div className="cols">
             <div>
               <Link to="/" className="logo">
-                <i />
+                <HeartMark className="hm-mark" />
                 {brand.name}
               </Link>
               <p>Saúde do coração acompanhada de perto, em casa.</p>
