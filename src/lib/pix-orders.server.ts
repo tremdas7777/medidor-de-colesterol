@@ -8,6 +8,7 @@ import { brand } from "@/lib/brand";
 import { upsellPrice } from "@/lib/upsell";
 import { isPaidStatus } from "@/lib/pix-status";
 import { fetchPixStatus } from "@/lib/pix-gateway.server";
+import { syncPricesFromDb } from "@/lib/prices.server";
 
 export type StoredCustomer = {
   name: string;
@@ -261,6 +262,7 @@ export async function reportPaidOnce(
     const prev = (o.report_result as { rastro?: { ok?: boolean; status?: number } } | null)?.rastro;
     const rastroDone =
       !!prev && (prev.ok || [401, 402, 403, 413, 415, 422].includes(prev.status ?? 0));
+    await syncPricesFromDb().catch(() => undefined);
     const bundle = getBundle(o.bundle_id);
     const isUpsell = !!c.upsellOf;
     const shipsKit = !isUpsell || (c.upsellItems ?? ["kit"]).includes("kit");

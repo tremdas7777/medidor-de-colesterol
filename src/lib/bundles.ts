@@ -35,7 +35,6 @@ export type Bundle = {
   checkoutUrl: string;
   featured?: boolean;
   badge?: string;
-  savings?: string;
   /** Itens da tabela de comparação. */
   includes: {
     lancetas: boolean;
@@ -94,7 +93,6 @@ export const bundles: Bundle[] = [
     checkoutUrl: "/checkout?plano=2",
     featured: true,
     badge: "Mais escolhido",
-    savings: "Economize R$ 3.500,00",
     includes: {
       lancetas: true,
       controle: true,
@@ -121,7 +119,6 @@ export const bundles: Bundle[] = [
     checkoutProductDescription: `${brand.productName} com 75 tiras de painel lipídico, maleta, lancetas, capilares e solução controle: ${PRODUCT_SUMMARY}.`,
     checkoutUrl: "/checkout?plano=3",
     badge: "Menor custo por teste",
-    savings: "Economize R$ 6.000,00",
     includes: {
       lancetas: true,
       controle: true,

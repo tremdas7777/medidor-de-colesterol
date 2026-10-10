@@ -17,6 +17,8 @@ import { WhatsAppFloat } from "@/components/site/WhatsAppFloat";
 import { brand } from "@/lib/brand";
 import { FREE_SHIPPING_LABEL } from "@/lib/bundles";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { getPrices } from "@/lib/prices.functions";
+import { applyPrices } from "@/lib/prices";
 
 import appCss from "../styles.css?url";
 
@@ -153,6 +155,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     scripts: pixelScripts(),
   }),
+  // Preços do /admin → Preços (só exibição; o servidor recalcula antes de cobrar). Se o banco
+  // falhar, a loja abre com os preços de fábrica (e a cobrança não sai até o banco voltar).
+  loader: () => getPrices().catch(() => null),
+  staleTime: 60_000,
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -186,6 +192,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  applyPrices(Route.useLoaderData());
   useAntiCopy();
   useTrackPageView();
   useMetaPixel();

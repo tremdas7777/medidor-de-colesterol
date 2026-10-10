@@ -1,21 +1,26 @@
 import type { Bundle } from "@/lib/bundles";
 
-/** Upsell pós-compra no Pix: pacote de 50 tiras de painel lipídico com desconto. */
-export const UPSELL_DISCOUNT = 0.4;
-
-/** Pacote oferecido na tela pós-compra. */
+/**
+ * Pacote oferecido na tela pós-compra (Pix): 50 tiras de painel lipídico com desconto.
+ * Preço e preço "de" editáveis no /admin → Preços.
+ */
 export const UPSELL_PACK = {
   strips: 50,
   name: "50 tiras de painel lipídico",
+  /** Preço cobrado. */
+  price: 1788,
   /** Preço de tabela (riscado). */
   listPrice: 2980,
-} as const;
+};
+
+/** Desconto do pacote em relação ao preço de tabela (0 a 1). */
+export const upsellDiscount = () =>
+  UPSELL_PACK.listPrice > UPSELL_PACK.price ? 1 - UPSELL_PACK.price / UPSELL_PACK.listPrice : 0;
 
 /** Nome enviado ao gateway na cobrança do upsell (genérico). */
 export const UPSELL_GATEWAY_NAME = "Pedido CardioMed";
 
-export const upsellPrice = (_bundle: Bundle) =>
-  Math.round(UPSELL_PACK.listPrice * (1 - UPSELL_DISCOUNT) * 100) / 100;
+export const upsellPrice = (_bundle: Bundle) => UPSELL_PACK.price;
 
 /** Ofertas da tela pós-compra. */
 export const UPSELL_PRODUCTS = ["kit", "seguro", "expresso"] as const;
@@ -28,7 +33,7 @@ export const SHIPPING_INSURANCE = {
   /** Nome enviado ao gateway. */
   gatewayName: "Seguro de entrega",
   price: 89.9,
-} as const;
+};
 
 /** Envio expresso: página própria depois da tela de ofertas (cobrança separada). */
 export const EXPRESS_SHIPPING = {
@@ -36,7 +41,7 @@ export const EXPRESS_SHIPPING = {
   /** Nome enviado ao gateway. */
   gatewayName: "Envio expresso",
   price: 49.9,
-} as const;
+};
 
 /**
  * O que o cliente escolheu na tela pós-compra, numa cobrança só (preços do servidor).
@@ -50,7 +55,7 @@ export function upsellSelection(bundle: Bundle, chosen: readonly string[]) {
         product: p,
         title: UPSELL_GATEWAY_NAME,
         price: upsellPrice(bundle),
-        label: `${UPSELL_PACK.name} ${Math.round(UPSELL_DISCOUNT * 100)}% OFF`,
+        label: `${UPSELL_PACK.name} ${Math.round(upsellDiscount() * 100)}% OFF`,
       };
     const o = p === "seguro" ? SHIPPING_INSURANCE : EXPRESS_SHIPPING;
     return { product: p, title: o.gatewayName, price: o.price, label: o.name };

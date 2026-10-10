@@ -6,6 +6,7 @@ import { getAdminFunnel, verifyAdminPassword } from "@/lib/admin.functions";
 import { getSiteSettings, setWhatsappEnabled } from "@/lib/site-settings.functions";
 import { UtmifyCard } from "@/components/admin/UtmifyCard";
 import { PixGatewayCard } from "@/components/admin/PixGatewayCard";
+import { PricesTab } from "@/components/admin/PricesTab";
 import { MetaPixelCard } from "@/components/admin/MetaPixelCard";
 import { OrdersTab } from "@/components/admin/OrdersTab";
 import { AbandonedTab } from "@/components/admin/AbandonedTab";
@@ -248,12 +249,16 @@ function AdminPage() {
             <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
             <TabsTrigger value="abandonados">Checkouts abandonados</TabsTrigger>
             <TabsTrigger value="lucro">Lucro</TabsTrigger>
+            <TabsTrigger value="precos">Preços</TabsTrigger>
           </TabsList>
 
           <TabsContent value="pedidos">
             <OrdersTab password={password} />
           </TabsContent>
 
+          <TabsContent value="precos">
+            <PricesTab password={password} />
+          </TabsContent>
           <TabsContent value="lucro">
             <ProfitTab password={password} />
           </TabsContent>

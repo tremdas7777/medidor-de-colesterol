@@ -18,6 +18,7 @@ import {
   findUpsellOf,
 } from "@/lib/pix-orders.server";
 import { createPix } from "@/lib/pix-gateway.server";
+import { syncPricesFromDb } from "@/lib/prices.server";
 import { isPaidStatus } from "@/lib/pix-status";
 import { UPSELL_PRODUCTS, upsellSelection } from "@/lib/upsell";
 import { getRequest } from "@tanstack/react-start/server";
@@ -98,7 +99,8 @@ function requestMeta() {
 export const createPixCharge = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => customerSchema.parse(d))
   .handler(async ({ data }): Promise<PixCharge> => {
-    // Preço sempre definido no servidor — nunca confiar no cliente.
+    // Preço sempre definido no servidor (o do /admin → Preços), nunca o do cliente.
+    await syncPricesFromDb();
     const bundle = getBundle(parseBundleId(data.plano) ?? "1");
     if (
       data.frete === "gratis" &&
@@ -184,6 +186,7 @@ export const createUpsellCharge = createServerFn({ method: "POST" })
       .parse(d),
   )
   .handler(async ({ data }): Promise<PixCharge> => {
+    await syncPricesFromDb();
     const parent = await getOrder(data.parentId);
     if (!parent || parent.customer?.upsellOf) throw new Error("Pedido não encontrado.");
     if (!isPaidStatus(parent.status)) {

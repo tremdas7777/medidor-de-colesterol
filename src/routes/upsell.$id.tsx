@@ -9,7 +9,7 @@ import { createUpsellCharge } from "@/lib/pix.functions";
 import { loadPixSession, savePixSession, type PixSession } from "@/lib/pix-session";
 import {
   SHIPPING_INSURANCE,
-  UPSELL_DISCOUNT,
+  upsellDiscount,
   UPSELL_PACK,
   upsellPrice,
   upsellSelection,
@@ -47,7 +47,7 @@ function Page() {
 
   const bundle = getBundle(session?.bundleId);
   const price = upsellPrice(bundle);
-  const off = Math.round(UPSELL_DISCOUNT * 100);
+  const off = Math.round(upsellDiscount() * 100);
   const sel = upsellSelection(bundle, chosen);
   const withKit = sel.products.includes("kit");
 
@@ -131,16 +131,18 @@ function Page() {
             />
             <div>
               <p className="text-[12px] font-bold uppercase tracking-wide text-[var(--ck-ok)]">
-                Só nesta tela: {off}% OFF
+                {off > 0 ? `Só nesta tela: ${off}% OFF` : "Só nesta tela"}
               </p>
               <p className="text-[15px] font-semibold">+{UPSELL_PACK.name}</p>
               <p className="text-[13px] text-muted-foreground">
                 {UPSELL_PACK.strips} testes completos de lipidograma
               </p>
               <div className="mt-1 flex flex-wrap items-baseline gap-x-2">
-                <span className="text-[13px] text-muted-foreground line-through">
-                  {brl(UPSELL_PACK.listPrice)}
-                </span>
+                {UPSELL_PACK.listPrice > price && (
+                  <span className="text-[13px] text-muted-foreground line-through">
+                    {brl(UPSELL_PACK.listPrice)}
+                  </span>
+                )}
                 <span className="text-[20px] font-bold text-[var(--ck-ok)]">{brl(price)}</span>
               </div>
             </div>
