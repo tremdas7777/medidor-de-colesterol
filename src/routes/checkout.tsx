@@ -386,7 +386,7 @@ function Page() {
           />
           {FRETES.map(({ id: v, name: t, eta: d, price }) => {
             const locked = v === "gratis" && !freeEligible;
-            const p = locked ? `Acima de ${brl(FREE_SHIPPING_MIN)}` : price ? brl(price) : "Grátis";
+            const p = locked ? "Indisponível" : price ? brl(price) : "Grátis";
             return (
               <button
                 key={v}
@@ -403,7 +403,7 @@ function Page() {
                 <span className="flex-1">
                   <span className="block text-[13px] font-medium">{t}</span>
                   <span className="text-[11px] text-muted-foreground">
-                    {locked ? `Faltam ${brl(FREE_SHIPPING_MIN - subtotal)} em produtos` : d}
+                    {locked ? `Só para pedidos a partir de ${brl(FREE_SHIPPING_MIN)}` : d}
                   </span>
                 </span>
                 <span className="text-[13px] font-semibold">{p}</span>

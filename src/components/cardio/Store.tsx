@@ -3,7 +3,9 @@ import {
   availableBundles,
   brl,
   FREE_SHIPPING_LABEL,
+  FREE_SHIPPING_MIN,
   getBundle,
+  isFreeShippingEligible,
   type Bundle,
   type BundleId,
 } from "@/lib/bundles";
@@ -208,6 +210,11 @@ function ProductBlock({ bundle, onSelect }: { bundle: Bundle; onSelect: (id: Bun
                   {b.badge && <em>{b.badge}</em>}
                 </span>
                 <span className="kit-d">{b.description}</span>
+                <span className={`kit-ship ${isFreeShippingEligible(b.price) ? "ok" : ""}`}>
+                  {isFreeShippingEligible(b.price)
+                    ? "Frete grátis"
+                    : `+ frete (grátis a partir de ${brl(FREE_SHIPPING_MIN)})`}
+                </span>
               </span>
               <span className="kit-p">
                 {b.compareAtPrice && <s>{brl(b.compareAtPrice)}</s>}

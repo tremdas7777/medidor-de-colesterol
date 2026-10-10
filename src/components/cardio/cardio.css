@@ -564,3 +564,8 @@
 .cm .stp .ph.illus svg { width: 100%; height: 100%; display: block; }
 .cm .stp .arrow.down { top: 2%; bottom: auto; rotate: 225deg; }
 .cm .stp .ph.devph.chip .dev { top: 14%; bottom: 0%; }
+
+/* frete por kit (escolha do kit e cartões da home) */
+.cm .kit-ship { display: block; margin-top: 3px; font-size: 0.78rem; color: var(--cm-muted); }
+.cm .kit-ship.ok { color: var(--cm-buy); font-weight: 600; }
+.cm .kc .kit-ship { margin-top: 2px; }

@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { availableBundles, brl, type Bundle } from "@/lib/bundles";
+import {
+  availableBundles,
+  brl,
+  FREE_SHIPPING_MIN,
+  isFreeShippingEligible,
+  type Bundle,
+} from "@/lib/bundles";
 import { brand } from "@/lib/brand";
 import { BONUS, FAQ, PERSONAS, REVIEWS, STEPS } from "@/lib/store-content";
 import { trackCheckoutClick } from "@/lib/analytics";
@@ -472,6 +478,11 @@ export function KitCards() {
                 <div className="pp">{brl(b.price)}</div>
                 <div className="per">
                   {pt ? `${b.strips} medições inclusas` : "Tiras vendidas à parte"}
+                </div>
+                <div className={`kit-ship ${isFreeShippingEligible(b.price) ? "ok" : ""}`}>
+                  {isFreeShippingEligible(b.price)
+                    ? "Frete grátis"
+                    : `+ frete (grátis a partir de ${brl(FREE_SHIPPING_MIN)})`}
                 </div>
                 <ul>
                   {(KIT_ITEMS[b.id] ?? []).map((t) => (
