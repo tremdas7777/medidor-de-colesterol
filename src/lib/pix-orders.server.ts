@@ -7,7 +7,6 @@ import { getBundle } from "@/lib/bundles";
 import { brand } from "@/lib/brand";
 import { upsellPrice } from "@/lib/upsell";
 import { isPaidStatus } from "@/lib/pix-status";
-import { getCardTransaction, isCardOrderId, CARD_ORDER_PREFIX } from "@/lib/hypercash.server";
 import { fetchPixStatus } from "@/lib/pix-gateway.server";
 
 export type StoredCustomer = {
@@ -161,14 +160,8 @@ export async function reportPendingToUtmify(o: {
 
 export { isPaidStatus };
 
-/** Consulta o status real no gateway. */
+/** Consulta o status real na SagacePay. */
 export async function fetchGatewayStatus(id: string): Promise<{ status: string; amount: number }> {
-  if (isCardOrderId(id)) {
-    const tx = await getCardTransaction(id.slice(CARD_ORDER_PREFIX.length));
-    // HyperCash já devolve o valor em centavos.
-    return { status: tx?.status ?? "processing", amount: tx?.amount ?? 0 };
-  }
-  // Pix: Umbrella (id com prefixo "um_") ou PixGate.
   return fetchPixStatus(id);
 }
 

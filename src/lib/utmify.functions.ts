@@ -62,8 +62,8 @@ export const sendUtmifyTest = createServerFn({ method: "POST" })
         phone: "11999999999",
         document: "52998224725",
       },
-      product: { id: "2", name: "Glicosímetro GlicoMax - 2 Glicosímetros" },
-      amountCents: 14990,
+      product: { id: "2", name: "Analisador CardioChek PA - Kit Inicial" },
+      amountCents: 649000,
       utm: { utm_source: "teste" },
     });
   });

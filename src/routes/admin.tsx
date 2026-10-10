@@ -5,7 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { getAdminFunnel, verifyAdminPassword } from "@/lib/admin.functions";
 import { getSiteSettings, setWhatsappEnabled } from "@/lib/site-settings.functions";
 import { UtmifyCard } from "@/components/admin/UtmifyCard";
-import { HypercashCard } from "@/components/admin/HypercashCard";
 import { PixGatewayCard } from "@/components/admin/PixGatewayCard";
 import { MetaPixelCard } from "@/components/admin/MetaPixelCard";
 import { OrdersTab } from "@/components/admin/OrdersTab";
@@ -27,12 +26,12 @@ import {
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
-    meta: [{ title: "Admin · GlicoMax" }, { name: "robots", content: "noindex,nofollow" }],
+    meta: [{ title: "Admin · CardioMed" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: AdminPage,
 });
 
-const STORAGE_KEY = "glicomax_admin_pwd";
+const STORAGE_KEY = "cardiomed_admin_pwd";
 
 type FunnelEvent = {
   id: string;
@@ -205,7 +204,7 @@ function AdminPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <Card className="w-full max-w-sm p-8">
-          <h1 className="text-2xl font-display mb-2">Admin GlicoMax</h1>
+          <h1 className="text-2xl font-display mb-2">Admin CardioMed</h1>
           <p className="text-sm text-muted-foreground mb-6">Acesso restrito</p>
           <form onSubmit={handleLogin} className="space-y-4">
             <Input
@@ -294,7 +293,6 @@ function AdminPage() {
                 </div>
               </Card>
               <PixGatewayCard password={password} />
-              <HypercashCard password={password} />
               <UtmifyCard password={password} />
               <MetaPixelCard password={password} />
             </section>

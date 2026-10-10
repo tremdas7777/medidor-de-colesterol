@@ -58,7 +58,7 @@ export function FreeShippingProgress({
       {showUpgrade && (
         <div className="mt-3 rounded-md border border-[var(--ck-ok)]/30 bg-white p-3">
           <p className="text-[13px] leading-snug">
-            Leve <b>{upgrade.units} glicosímetros</b> por{" "}
+            Leve o <b>{upgrade.name}</b> por{" "}
             <b className="text-[var(--ck-ok)]">{brl(upgrade.price)}</b>
             {upgrade.compareAtPrice && upgrade.compareAtPrice > upgrade.price && (
               <> — economize {brl(upgrade.compareAtPrice - upgrade.price)}</>
@@ -70,7 +70,7 @@ export function FreeShippingProgress({
             search={{ plano: upgrade.id }}
             className="mt-2 flex w-full items-center justify-center gap-2 rounded-md bg-[var(--ck-ok)] px-3 py-2.5 text-[13px] font-bold text-white transition hover:opacity-90"
           >
-            <Truck className="h-4 w-4" /> Quero {upgrade.units} unidades com frete grátis
+            <Truck className="h-4 w-4" /> Quero o {upgrade.name} com frete grátis
           </Link>
         </div>
       )}

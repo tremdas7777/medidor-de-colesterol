@@ -1,18 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { getPixGatewayState, PIX_GATEWAYS, savePixGateway } from "./pix-gateway.server";
 import {
-  deletePixgateKey,
-  getPixgateKeySource,
-  savePixgateKey,
-  testPixgateKey,
-} from "./pixgate.server";
-import {
-  deleteUmbrellaKey,
-  getUmbrellaKeySource,
-  saveUmbrellaKey,
-  testUmbrellaKey,
-} from "./umbrella.server";
+  deleteSagacePayKey,
+  getSagacePayKeySource,
+  saveSagacePayKey,
+  testSagacePayKey,
+} from "./sagacepay.server";
 
 const pw = z.object({ password: z.string().min(1).max(200) });
 
@@ -25,77 +18,35 @@ function mask(token: string): string {
   return `${token.slice(0, 4)}••••${token.slice(-4)}`;
 }
 
-/** Gateway escolhido, gateway em uso e chaves da PixGate e da Umbrella (mascaradas). */
-export const getPixGatewayStatus = createServerFn({ method: "POST" })
+/** Chave da SagacePay em uso (mascarada) e de onde ela vem. */
+export const getSagacePayStatus = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => pw.parse(d))
   .handler(async ({ data }) => {
     assertAdmin(data.password);
-    const [state, pixgate, umbrella] = await Promise.all([
-      getPixGatewayState(),
-      getPixgateKeySource(),
-      getUmbrellaKeySource(),
-    ]);
-    return {
-      ...state,
-      keys: {
-        pixgate: { key: pixgate.key ? mask(pixgate.key) : null, source: pixgate.source },
-        umbrella: { key: umbrella.key ? mask(umbrella.key) : null, source: umbrella.source },
-      },
-    };
+    const { key, source } = await getSagacePayKeySource();
+    return { key: key ? mask(key) : null, source };
   });
 
-export const setPixGatewayFn = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => pw.extend({ gateway: z.enum(PIX_GATEWAYS) }).parse(d))
-  .handler(async ({ data }) => {
-    assertAdmin(data.password);
-    await savePixGateway(data.gateway);
-    return { ok: true };
-  });
-
-export const savePixgateKeyFn = createServerFn({ method: "POST" })
+export const saveSagacePayKeyFn = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => pw.extend({ key: z.string().trim().min(10).max(500) }).parse(d))
   .handler(async ({ data }) => {
     assertAdmin(data.password);
-    await savePixgateKey(data.key);
+    await saveSagacePayKey(data.key);
     return { ok: true };
   });
 
-export const deletePixgateKeyFn = createServerFn({ method: "POST" })
+export const deleteSagacePayKeyFn = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => pw.parse(d))
   .handler(async ({ data }) => {
     assertAdmin(data.password);
-    await deletePixgateKey();
+    await deleteSagacePayKey();
     return { ok: true };
   });
 
-export const saveUmbrellaKeyFn = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => pw.extend({ key: z.string().trim().min(10).max(500) }).parse(d))
-  .handler(async ({ data }) => {
-    assertAdmin(data.password);
-    await saveUmbrellaKey(data.key);
-    return { ok: true };
-  });
-
-export const deleteUmbrellaKeyFn = createServerFn({ method: "POST" })
+/** Valida a chave da SagacePay sem gerar cobrança nenhuma. */
+export const testSagacePayFn = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => pw.parse(d))
   .handler(async ({ data }) => {
     assertAdmin(data.password);
-    await deleteUmbrellaKey();
-    return { ok: true };
-  });
-
-/** Valida a chave da Umbrella sem gerar cobrança nenhuma. */
-export const testUmbrellaFn = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => pw.parse(d))
-  .handler(async ({ data }) => {
-    assertAdmin(data.password);
-    return testUmbrellaKey();
-  });
-
-/** Valida a chave da PixGate sem gerar cobrança nenhuma. */
-export const testPixgateFn = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => pw.parse(d))
-  .handler(async ({ data }) => {
-    assertAdmin(data.password);
-    return testPixgateKey();
+    return testSagacePayKey();
   });

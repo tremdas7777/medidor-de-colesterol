@@ -1,88 +1,145 @@
 import { brand } from "@/lib/brand";
 
-/** Kit por quantidade de glicosímetros (1 / 2 / 3 unidades) */
+/** Kits: analisador avulso, Kit Inicial (25 tiras) e Kit Profissional (75 tiras). */
 export type BundleId = "1" | "2" | "3";
 
-export const brl = (n: number) =>
-  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+export const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-/** Valor mínimo (produtos, sem frete) para liberar o frete grátis. */
-export const FREE_SHIPPING_MIN = 87.9;
-export const FREE_SHIPPING_LABEL = `Frete grátis em compras acima de ${brl(FREE_SHIPPING_MIN)}`;
+/** Valor mínimo (produtos, sem frete) para liberar o frete grátis. Todos os kits passam dele. */
+export const FREE_SHIPPING_MIN = 0;
+export const FREE_SHIPPING_LABEL = "Frete grátis para todo o Brasil";
 
 export const isFreeShippingEligible = (subtotal: number) => subtotal >= FREE_SHIPPING_MIN;
 
-/** Selo de frete por kit: grátis quando o próprio kit já passa do mínimo. */
-export const bundleShippingLabel = (b: { price: number }) =>
-  isFreeShippingEligible(b.price) ? "Frete grátis para todo o Brasil" : FREE_SHIPPING_LABEL;
+/** Selo de frete por kit. */
+export const bundleShippingLabel = (_b: { price: number }) => FREE_SHIPPING_LABEL;
 
 export type Bundle = {
   id: BundleId;
   name: string;
+  /** Nome curto (tabela de comparação). */
+  short: string;
+  /** Analisadores no kit (usado em relatórios e no upsell). */
   units: number;
+  /** Tiras de painel lipídico que vão no kit. */
+  strips: number;
   price: number;
   compareAtPrice?: number;
-  /** Texto curto abaixo do preço (ex.: valor por unidade). */
+  /** Texto curto abaixo do preço. */
   priceNote: string;
   description: string;
+  /** Para quem é o kit (tabela de comparação). */
+  audience: string;
   checkoutProductName: string;
   checkoutProductDescription: string;
   checkoutUrl: string;
   featured?: boolean;
   badge?: string;
   savings?: string;
+  /** Itens da tabela de comparação. */
+  includes: {
+    lancetas: boolean;
+    controle: boolean;
+    maleta: boolean;
+    treinamento: boolean;
+    artes: boolean;
+    planilha: boolean;
+    ficha: boolean;
+    suporte: boolean;
+  };
 };
 
 const PRODUCT_SUMMARY =
-  "glicosímetro que mede a glicose no sangue (mg/dL) pelo sensor no dedo, sem furar e sem agulha, e também mostra os batimentos cardíacos, com tela colorida e operação por um botão";
+  "analisador portátil que mede colesterol total, HDL, triglicérides e glicose com uma gota de sangue capilar e calcula LDL e razão CT/HDL, com resultado em até 90 segundos";
 
 export const bundles: Bundle[] = [
   {
     id: "1",
-    name: "1 Glicosímetro",
+    name: "Somente o analisador",
+    short: "Analisador",
     units: 1,
-    price: 57.9,
-    priceNote: "Para uso pessoal",
-    description: "1 glicosímetro GlicoMax · glicose e batimentos",
-    checkoutProductName: `${brand.productName} — 1 unidade`,
-    checkoutProductDescription: `${brand.productName}: ${PRODUCT_SUMMARY}. ${FREE_SHIPPING_LABEL}.`,
+    strips: 0,
+    price: 5240,
+    compareAtPrice: 7490,
+    priceNote: "Para quem já tem tiras e insumos",
+    description: "Para quem já tem tiras e insumos",
+    audience: "Já tem tiras",
+    checkoutProductName: brand.productName,
+    checkoutProductDescription: `${brand.productName}: ${PRODUCT_SUMMARY}.`,
     checkoutUrl: "/checkout?plano=1",
+    includes: {
+      lancetas: false,
+      controle: false,
+      maleta: false,
+      treinamento: true,
+      artes: false,
+      planilha: false,
+      ficha: false,
+      suporte: false,
+    },
   },
   {
     id: "2",
-    name: "2 Glicosímetros",
-    units: 2,
-    price: 87.9,
-    // "De": 2 unidades compradas separadas (2 × R$ 57,90).
-    compareAtPrice: 115.8,
-    priceNote: `${brl(87.9 / 2)} cada`,
-    description: "2 glicosímetros GlicoMax · um para você, outro para quem você cuida",
-    checkoutProductName: `${brand.productName} — 2 unidades`,
-    checkoutProductDescription: `${brand.productName} (2 unidades): ${PRODUCT_SUMMARY}. Frete grátis para todo o Brasil.`,
+    name: "Kit Inicial",
+    short: "Kit Inicial",
+    units: 1,
+    strips: 25,
+    price: 6490,
+    compareAtPrice: 9990,
+    priceNote: "Analisador + 25 tiras + insumos",
+    description: "Analisador + 25 tiras de painel lipídico + insumos",
+    audience: "Para começar a atender",
+    checkoutProductName: `${brand.productName} — Kit Inicial`,
+    checkoutProductDescription: `${brand.productName} com 25 tiras de painel lipídico, lancetas, capilares e solução controle: ${PRODUCT_SUMMARY}.`,
     checkoutUrl: "/checkout?plano=2",
     featured: true,
-    badge: "Mais vendido",
-    savings: "Economize R$ 27,90",
+    badge: "Mais escolhido",
+    savings: "Economize R$ 3.500,00",
+    includes: {
+      lancetas: true,
+      controle: true,
+      maleta: false,
+      treinamento: true,
+      artes: true,
+      planilha: true,
+      ficha: true,
+      suporte: false,
+    },
   },
   {
     id: "3",
-    name: "3 Glicosímetros",
-    units: 3,
-    price: 119.9,
-    // "De": 3 unidades compradas separadas (3 × R$ 57,90).
-    compareAtPrice: 173.7,
-    priceNote: `${brl(119.9 / 3)} cada`,
-    description: "3 glicosímetros GlicoMax · kit para a família",
-    checkoutProductName: `${brand.productName} — 3 unidades`,
-    checkoutProductDescription: `${brand.productName} (3 unidades): ${PRODUCT_SUMMARY}. Frete grátis para todo o Brasil.`,
+    name: "Kit Profissional",
+    short: "Kit Profissional",
+    units: 1,
+    strips: 75,
+    price: 8990,
+    compareAtPrice: 14990,
+    priceNote: "Analisador + 75 tiras + maleta",
+    description: "Analisador + 75 tiras + maleta e insumos",
+    audience: "Alto volume de atendimentos",
+    checkoutProductName: `${brand.productName} — Kit Profissional`,
+    checkoutProductDescription: `${brand.productName} com 75 tiras de painel lipídico, maleta, lancetas, capilares e solução controle: ${PRODUCT_SUMMARY}.`,
     checkoutUrl: "/checkout?plano=3",
-    badge: "Kit família",
-    savings: "Economize R$ 53,80",
+    badge: "Menor custo por teste",
+    savings: "Economize R$ 6.000,00",
+    includes: {
+      lancetas: true,
+      controle: true,
+      maleta: true,
+      treinamento: true,
+      artes: true,
+      planilha: true,
+      ficha: true,
+      suporte: true,
+    },
   },
 ];
 
 /** Kits visíveis na loja. */
 export const availableBundles = bundles;
+
+/** Kit que abre selecionado na loja. */
+export const DEFAULT_BUNDLE_ID: BundleId = "2";
 
 export function parseBundleId(raw: string | undefined): BundleId | undefined {
   if (raw === "1" || raw === "2" || raw === "3") return raw;
@@ -109,5 +166,5 @@ export function getUpgradeBundle(current: Bundle): Bundle | null {
 export const unitsLabel = (units: number) => `${units} ${units > 1 ? "unidades" : "unidade"}`;
 
 export function bundleDurationLabel(bundle: Bundle) {
-  return `${unitsLabel(bundle.units)} · glicose e batimentos`;
+  return bundle.strips ? `Analisador + ${bundle.strips} tiras` : "Somente o analisador";
 }

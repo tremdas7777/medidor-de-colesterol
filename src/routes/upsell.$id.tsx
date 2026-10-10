@@ -3,13 +3,14 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import { CircleCheck, Loader2, ShieldCheck } from "lucide-react";
-import { getBundle, unitsLabel } from "@/lib/bundles";
+import { getBundle } from "@/lib/bundles";
 import { brand } from "@/lib/brand";
-import { createCardFollowUpCharge, createUpsellCharge } from "@/lib/pix.functions";
+import { createUpsellCharge } from "@/lib/pix.functions";
 import { loadPixSession, savePixSession, type PixSession } from "@/lib/pix-session";
 import {
   SHIPPING_INSURANCE,
   UPSELL_DISCOUNT,
+  UPSELL_PACK,
   upsellPrice,
   upsellSelection,
   type UpsellProduct,
@@ -19,24 +20,22 @@ import { Shell } from "@/components/checkout/OrderShell";
 
 export const Route = createFileRoute("/upsell/$id")({
   head: () => ({
-    meta: [{ title: "Oferta especial | GlicoMax" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "Oferta especial | CardioMed" }, { name: "robots", content: "noindex" }],
   }),
   component: Page,
 });
 
 /**
- * Ofertas pós-compra: kit extra (mais 1 kit igual ao comprado com 50% OFF) e seguro de entrega.
+ * Ofertas pós-compra: pacote de tiras com desconto e seguro de entrega.
  * O cliente marca uma, as duas ou nenhuma; o que marcou vai numa cobrança só. Depois (comprando ou
  * não) vem a página do envio expresso — ver /expresso:
- * compra no cartão → no mesmo cartão (com o clique do cliente); compra no Pix → um Pix separado.
+ * cobrado num Pix separado.
  */
 function Page() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const [session, setSession] = useState<PixSession | null | undefined>(undefined);
   const createFn = useServerFn(createUpsellCharge);
-  const cardFn = useServerFn(createCardFollowUpCharge);
-  const [usePix, setUsePix] = useState(false);
   const [chosen, setChosen] = useState<UpsellProduct[]>([]);
 
   useEffect(() => {
@@ -52,33 +51,20 @@ function Page() {
   const sel = upsellSelection(bundle, chosen);
   const withKit = sel.products.includes("kit");
 
-  const isCard = session?.method === "card" && !!session.cardHash && !usePix;
   const toggle = (p: UpsellProduct) =>
     setChosen((cur) => (cur.includes(p) ? cur.filter((x) => x !== p) : [...cur, p]));
 
   const mutation = useMutation({
     mutationFn: async () => {
-      if (isCard) {
-        const r = await cardFn({
-          data: {
-            parentId: id,
-            origin: window.location.origin,
-            cardHash: session!.cardHash!,
-            products: sel.products,
-          },
-        });
-        return { ...r, qrcode: "", method: "card" as const };
-      }
       const r = await createFn({
         data: { parentId: id, origin: window.location.origin, products: sel.products },
       });
-      return { ...r, method: "pix" as const };
+      return r;
     },
     onSuccess: (c) => {
       if (!session) return;
       savePixSession({
-        method: c.method,
-        installments: c.method === "card" ? session.installments : undefined,
+        method: "pix",
         id: c.id,
         qrcode: c.qrcode,
         amount: c.amount,
@@ -131,10 +117,7 @@ function Page() {
           Escolha o que adicionar ao seu pedido
         </h1>
         <p className="mt-2 text-center text-[14px] text-muted-foreground">
-          Marque uma ou as duas ofertas.{" "}
-          {isCard
-            ? "Cobramos no mesmo cartão da sua compra, sem digitar nada."
-            : "Você paga tudo num Pix só."}
+          Marque uma ou as duas ofertas. Você paga tudo num Pix só.
         </p>
 
         <Offer checked={chosen.includes("kit")} onToggle={() => toggle("kit")}>
@@ -148,24 +131,24 @@ function Page() {
             />
             <div>
               <p className="text-[12px] font-bold uppercase tracking-wide text-[var(--ck-ok)]">
-                Kit extra com {off}% OFF
+                Só nesta tela: {off}% OFF
               </p>
-              <p className="text-[15px] font-semibold">{bundle.name}</p>
+              <p className="text-[15px] font-semibold">+{UPSELL_PACK.name}</p>
               <p className="text-[13px] text-muted-foreground">
-                Mais {unitsLabel(bundle.units)} · Glicose e batimentos
+                {UPSELL_PACK.strips} testes completos de lipidograma
               </p>
               <div className="mt-1 flex flex-wrap items-baseline gap-x-2">
                 <span className="text-[13px] text-muted-foreground line-through">
-                  {brl(bundle.price)}
+                  {brl(UPSELL_PACK.listPrice)}
                 </span>
                 <span className="text-[20px] font-bold text-[var(--ck-ok)]">{brl(price)}</span>
               </div>
             </div>
           </div>
           <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
-            Tenha um glicosímetro em cada lugar — casa, trabalho, bolsa — ou{" "}
-            <b className="text-foreground">dê um para quem você cuida</b>. Enviado para o mesmo
-            endereço, sem frete extra.
+            Quem começa a oferecer o check-up usa as tiras mais rápido do que imagina.{" "}
+            <b className="text-foreground">Garanta o estoque dos próximos meses</b> com o maior
+            desconto da loja. Vai no mesmo envio, sem frete extra.
           </p>
         </Offer>
 
@@ -186,28 +169,11 @@ function Page() {
           </div>
         </Offer>
 
-        {mutation.isError &&
-          (isCard ? (
-            <p role="alert" className="mt-4 text-center text-sm text-destructive">
-              {mutation.error instanceof Error
-                ? mutation.error.message
-                : "Não foi possível cobrar no mesmo cartão."}{" "}
-              <button
-                type="button"
-                onClick={() => {
-                  setUsePix(true);
-                  mutation.reset();
-                }}
-                className="font-semibold underline"
-              >
-                Pagar com Pix
-              </button>
-            </p>
-          ) : (
-            <p role="alert" className="mt-4 text-center text-sm text-destructive">
-              Não foi possível gerar o Pix agora. Tente novamente em alguns segundos.
-            </p>
-          ))}
+        {mutation.isError && (
+          <p role="alert" className="mt-4 text-center text-sm text-destructive">
+            Não foi possível gerar o Pix agora. Tente novamente em alguns segundos.
+          </p>
+        )}
 
         <button
           type="button"
@@ -217,12 +183,10 @@ function Page() {
         >
           <span className="flex items-center gap-2 text-[17px] font-bold uppercase">
             {mutation.isPending && <Loader2 className="h-5 w-5 animate-spin" />}
-            {isCard ? "Comprar com um clique" : "Gerar Pix"}
+            Gerar Pix
           </span>
           <span className="text-[13px] font-medium opacity-90">
-            {sel.products.length === 0
-              ? "Marque uma oferta acima"
-              : `${brl(sel.total)} ${isCard ? "no mesmo cartão" : "no Pix"}`}
+            {sel.products.length === 0 ? "Marque uma oferta acima" : `${brl(sel.total)} no Pix`}
           </span>
         </button>
 

@@ -8,7 +8,7 @@ import { Pill, Shell } from "@/components/checkout/OrderShell";
 
 export const Route = createFileRoute("/obrigado/$id")({
   head: () => ({
-    meta: [{ title: "Pedido confirmado | GlicoMax" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "Pedido confirmado | CardioMed" }, { name: "robots", content: "noindex" }],
   }),
   component: Page,
 });
@@ -54,9 +54,9 @@ function Page() {
         <p className="mt-2 text-sm text-muted-foreground">
           {extra
             ? "Obrigado pela confiança! Sua compra adicional foi registrada e vai para o mesmo endereço."
-            : "Obrigado pela compra! Seu pedido já está sendo preparado."}
-          {" "}
-          Acompanhe o envio em <b className="text-foreground">Rastrear pedido</b>, com o CPF usado na compra.
+            : "Obrigado pela compra! Seu pedido já está sendo preparado."}{" "}
+          Acompanhe o envio em <b className="text-foreground">Rastrear pedido</b>, com o CPF usado
+          na compra.
         </p>
 
         {(main || extra) && (
@@ -66,11 +66,9 @@ function Page() {
               {main && (
                 <div className="flex justify-between gap-3">
                   <div>
-                    <p className="font-medium">
-                      {main.bundleName} — Glicosímetro GlicoMax
-                    </p>
+                    <p className="font-medium">{main.bundleName} — Analisador CardioChek PA</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      {unitsLabel(main.units)} · Glicose e batimentos
+                      {main.units ? "Analisador CardioChek PA" : "Itens adicionais"}
                     </p>
                     {(main.bumps ?? (main.bump ? [main.bump] : [])).map((b) => (
                       <p key={b.name} className="mt-0.5 text-muted-foreground">
@@ -110,7 +108,10 @@ function Page() {
             {[
               { icon: Check, text: "Pagamento confirmado: seu pedido está registrado." },
               { icon: PackageCheck, text: "Separamos e embalamos o seu pedido." },
-              { icon: Truck, text: "Quando for postado, o código de rastreio aparece em Rastrear pedido (pelo CPF)." },
+              {
+                icon: Truck,
+                text: "Quando for postado, o código de rastreio aparece em Rastrear pedido (pelo CPF).",
+              },
             ].map(({ icon: Icon, text }) => (
               <li key={text} className="flex items-center gap-3">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--ck-green)] text-white">

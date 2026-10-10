@@ -1,27 +1,29 @@
-# Glicomax Store
+# CardioMed Store (CardioChek PA)
 
-Loja do glicosímetro GlicoMax, feita a partir da estrutura da loja AiDEX (painel `/admin`,
-checkout Pix/cartão, order bumps, upsell, envio expresso, UTMify, Meta e Rotasync).
+Loja do analisador CardioChek PA, feita a partir da estrutura da loja AiDEX/GlicoMax (painel
+`/admin` com pedidos, lucro, checkouts abandonados, integrações; checkout Pix, order bump, upsell,
+envio expresso, UTMify, Meta e Rotasync).
+
+**Pagamento: só Pix, pela SagacePay** (único gateway). PixGate, Umbrella e cartão (HyperCash) foram
+removidos. O pedido é gravado com o id da venda na SagacePay; status, webhook
+(`/api/public/pix-webhook`), upsell, envio expresso e relatórios consultam sempre a SagacePay.
 
 ## Antes de publicar
 
-- **Banco**: ative o Lovable Cloud e rode as migrações de `supabase/migrations`.
-- **Segredos** (Lovable Cloud): `ADMIN_PASSWORD`, `PIXGATE_API_KEY`, `RASTREIO_API_KEY`
-  (Rotasync; opcional `RASTREIO_API_URL`). HyperCash, UTMify e Meta são cadastrados no `/admin`.
-- **Marca e empresa**: `src/lib/brand.ts` (razão social, CNPJ, e-mail, domínio, WhatsApp).
-- **Preços e kits**: `src/lib/bundles.ts` · **order bumps**: `src/lib/order-bump.ts`.
+- **Banco**: ative o Lovable Cloud (projeto novo, não use o banco da GlicoMax) e rode as migrações de
+  `supabase/migrations`.
+- **Segredos** (Lovable Cloud): `ADMIN_PASSWORD`, `RASTREIO_API_KEY` (Rotasync; opcional
+  `RASTREIO_API_URL`). A chave da **SagacePay** é cadastrada no `/admin` → Integrações (com botão de
+  testar); o secret `SAGACEPAY_API_KEY` serve de reserva. UTMify e Meta também ficam no `/admin`.
+- **Marca e empresa**: `src/lib/brand.ts` (razão social, CNPJ, ANVISA, e-mail, domínio, WhatsApp).
+- **Preços e kits**: `src/lib/bundles.ts` · **order bump**: `src/lib/order-bump.ts` ·
+  **upsell**: `src/lib/upsell.ts`.
+- **Textos da vitrine** (perfis, bônus, avaliações, FAQ): `src/lib/store-content.ts`. A seção de
+  avaliações só aparece quando houver depoimentos reais em `REVIEWS`.
 - **Pixels do `<head>`**: `src/lib/pixels.ts` (Meta, TikTok, UTMify).
-- **Fotos**: `src/lib/product-images.ts` e `src/assets/` (as atuais são provisórias).
+- **Fotos**: `src/lib/product-images.ts` e `src/assets/`.
 
 This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/2ff46747-1aac-4ef1-a971-98ecd6b77f2a).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 

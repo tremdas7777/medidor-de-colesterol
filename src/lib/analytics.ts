@@ -21,7 +21,7 @@ export function trackCheckoutClick(payload: CheckoutClickPayload) {
     ...payload,
   };
 
-  window.dispatchEvent(new CustomEvent("glicomax:checkout_click", { detail: event }));
+  window.dispatchEvent(new CustomEvent("cardiomed:checkout_click", { detail: event }));
   (window as DataLayerWindow).dataLayer?.push(event);
 
   void trackEvent({

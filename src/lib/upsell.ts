@@ -1,13 +1,21 @@
 import type { Bundle } from "@/lib/bundles";
 
-/** Upsell pós-compra (Pix e cartão): mais 1 kit igual ao comprado (mesma quantidade de glicosímetros), com desconto. */
-export const UPSELL_DISCOUNT = 0.5;
+/** Upsell pós-compra no Pix: pacote de 50 tiras de painel lipídico com desconto. */
+export const UPSELL_DISCOUNT = 0.4;
 
-/** Nome do produto enviado ao gateway na cobrança de upsell no cartão. */
-export const UPSELL_GATEWAY_NAME = "Glicosímetro GlicoMax";
+/** Pacote oferecido na tela pós-compra. */
+export const UPSELL_PACK = {
+  strips: 50,
+  name: "50 tiras de painel lipídico",
+  /** Preço de tabela (riscado). */
+  listPrice: 2980,
+} as const;
 
-export const upsellPrice = (bundle: Bundle) =>
-  Math.round(bundle.price * (1 - UPSELL_DISCOUNT) * 100) / 100;
+/** Nome enviado ao gateway na cobrança do upsell (genérico). */
+export const UPSELL_GATEWAY_NAME = "Pedido CardioMed";
+
+export const upsellPrice = (_bundle: Bundle) =>
+  Math.round(UPSELL_PACK.listPrice * (1 - UPSELL_DISCOUNT) * 100) / 100;
 
 /** Ofertas da tela pós-compra. */
 export const UPSELL_PRODUCTS = ["kit", "seguro", "expresso"] as const;
@@ -19,7 +27,7 @@ export const SHIPPING_INSURANCE = {
   fullName: "Seguro de entrega — reenvio ou reembolso",
   /** Nome enviado ao gateway. */
   gatewayName: "Seguro de entrega",
-  price: 29.9,
+  price: 89.9,
 } as const;
 
 /** Envio expresso: página própria depois da tela de ofertas (cobrança separada). */
@@ -27,7 +35,7 @@ export const EXPRESS_SHIPPING = {
   name: "Envio expresso",
   /** Nome enviado ao gateway. */
   gatewayName: "Envio expresso",
-  price: 19.9,
+  price: 49.9,
 } as const;
 
 /**
@@ -42,7 +50,7 @@ export function upsellSelection(bundle: Bundle, chosen: readonly string[]) {
         product: p,
         title: UPSELL_GATEWAY_NAME,
         price: upsellPrice(bundle),
-        label: `Kit extra 50% OFF - ${bundle.name}`,
+        label: `${UPSELL_PACK.name} ${Math.round(UPSELL_DISCOUNT * 100)}% OFF`,
       };
     const o = p === "seguro" ? SHIPPING_INSURANCE : EXPRESS_SHIPPING;
     return { product: p, title: o.gatewayName, price: o.price, label: o.name };

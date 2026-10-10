@@ -8,7 +8,7 @@ export type PixSession = {
   name: string;
   bundleId: string;
   bundleName: string;
-  /** Quantidade de glicosímetros do kit (0 em cobranças sem produto, ex.: só envio expresso). */
+  /** Analisadores no kit (0 em cobranças sem produto, ex.: só envio expresso). */
   units: number;
   productPrice: number;
   /** Order bumps aceitos no checkout (valor em reais). */
@@ -31,11 +31,7 @@ export type PixSession = {
   utm?: Record<string, string | null>;
   fbp?: string | null;
   fbc?: string | null;
-  /** Pedido pago no cartão (sem código Pix). */
-  method?: "pix" | "card";
-  installments?: number;
-  /** Token do cartão gerado pela HyperCash (expira em ~15 min). Só nesta aba, nunca no banco. */
-  cardHash?: string;
+  method?: "pix";
 };
 
 const key = (id: string) => `pix:${id}`;
@@ -45,7 +41,6 @@ const MAX_AGE_MS = 3 * 24 * 60 * 60 * 1000;
 /**
  * Guarda a sessão em localStorage (vale para qualquer aba: no celular o cliente sai para o app do
  * banco e muitas vezes volta numa aba nova ou recarregada — sem isso ele pulava o upsell).
- * O token do cartão fica só no sessionStorage desta aba.
  */
 export function savePixSession(s: PixSession): void {
   try {
@@ -54,9 +49,8 @@ export function savePixSession(s: PixSession): void {
     // storage indisponível — a tela /pedido cai no fallback
   }
   try {
-    const { cardHash: _cardHash, ...persisted } = s;
     pruneOld();
-    localStorage.setItem(key(s.id), JSON.stringify(persisted));
+    localStorage.setItem(key(s.id), JSON.stringify(s));
   } catch {
     // storage indisponível
   }
@@ -73,10 +67,9 @@ export function loadPixSession(id: string): PixSession | null {
   };
   const tab = typeof sessionStorage === "undefined" ? null : read(sessionStorage);
   const shared = typeof localStorage === "undefined" ? null : read(localStorage);
-  // localStorage tem o progresso mais recente (upsellId/expressId salvos em outra aba);
-  // a aba atual completa com o token do cartão.
+  // localStorage tem o progresso mais recente (upsellId/expressId salvos em outra aba).
   if (!tab && !shared) return null;
-  return { ...(tab ?? {}), ...(shared ?? {}), cardHash: tab?.cardHash } as PixSession;
+  return { ...(tab ?? {}), ...(shared ?? {}) } as PixSession;
 }
 
 function pruneOld(): void {

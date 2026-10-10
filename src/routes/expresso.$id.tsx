@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { CircleCheck, Loader2, Truck } from "lucide-react";
-import { createCardFollowUpCharge, createUpsellCharge } from "@/lib/pix.functions";
+import { createUpsellCharge } from "@/lib/pix.functions";
 import { loadPixSession, savePixSession, type PixSession } from "@/lib/pix-session";
 import { EXPRESS_SHIPPING } from "@/lib/upsell";
 import { brl } from "@/components/checkout/parts";
@@ -11,22 +11,20 @@ import { Shell } from "@/components/checkout/OrderShell";
 
 export const Route = createFileRoute("/expresso/$id")({
   head: () => ({
-    meta: [{ title: "Oferta especial | GlicoMax" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "Oferta especial | CardioMed" }, { name: "robots", content: "noindex" }],
   }),
   component: Page,
 });
 
 /**
  * Envio expresso: página própria depois da tela de ofertas (comprando ou não o kit/seguro).
- * `id` é o pedido principal. Compra no cartão → mesmo cartão (com o clique do cliente); Pix → Pix separado.
+ * `id` é o pedido principal. Cobrado num Pix separado.
  */
 function Page() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const [session, setSession] = useState<PixSession | null | undefined>(undefined);
   const createFn = useServerFn(createUpsellCharge);
-  const cardFn = useServerFn(createCardFollowUpCharge);
-  const [usePix, setUsePix] = useState(false);
 
   useEffect(() => {
     const s = loadPixSession(id);
@@ -36,30 +34,17 @@ function Page() {
     else setSession(s);
   }, [id, navigate]);
 
-  const isCard = session?.method === "card" && !!session.cardHash && !usePix;
-
   const mutation = useMutation({
     mutationFn: async () => {
-      if (isCard) {
-        const r = await cardFn({
-          data: {
-            parentId: id,
-            origin: window.location.origin,
-            cardHash: session!.cardHash!,
-            products: ["expresso"],
-          },
-        });
-        return { ...r, qrcode: "", method: "card" as const };
-      }
       const r = await createFn({
         data: { parentId: id, origin: window.location.origin, products: ["expresso"] },
       });
-      return { ...r, method: "pix" as const };
+      return r;
     },
     onSuccess: (c) => {
       if (!session) return;
       savePixSession({
-        method: c.method,
+        method: "pix",
         id: c.id,
         qrcode: c.qrcode,
         amount: c.amount,
@@ -131,30 +116,13 @@ function Page() {
           </div>
         </div>
 
-        {mutation.isError &&
-          (isCard ? (
-            <p role="alert" className="mt-4 text-center text-sm text-destructive">
-              {mutation.error instanceof Error
-                ? mutation.error.message
-                : "Não foi possível cobrar no mesmo cartão."}{" "}
-              <button
-                type="button"
-                onClick={() => {
-                  setUsePix(true);
-                  mutation.reset();
-                }}
-                className="font-semibold underline"
-              >
-                Pagar com Pix
-              </button>
-            </p>
-          ) : (
-            <p role="alert" className="mt-4 text-center text-sm text-destructive">
-              {mutation.error instanceof Error
-                ? mutation.error.message
-                : "Não foi possível gerar o Pix agora. Tente novamente em alguns segundos."}
-            </p>
-          ))}
+        {mutation.isError && (
+          <p role="alert" className="mt-4 text-center text-sm text-destructive">
+            {mutation.error instanceof Error
+              ? mutation.error.message
+              : "Não foi possível gerar o Pix agora. Tente novamente em alguns segundos."}
+          </p>
+        )}
 
         <button
           type="button"
@@ -164,10 +132,10 @@ function Page() {
         >
           <span className="flex items-center gap-2 text-[17px] font-bold uppercase">
             {mutation.isPending && <Loader2 className="h-5 w-5 animate-spin" />}
-            {isCard ? "Comprar com um clique" : "Gerar Pix"}
+            Gerar Pix
           </span>
           <span className="text-[13px] font-medium opacity-90">
-            {brl(EXPRESS_SHIPPING.price)} {isCard ? "no mesmo cartão" : "no Pix"}
+            {brl(EXPRESS_SHIPPING.price)} no Pix
           </span>
         </button>
 

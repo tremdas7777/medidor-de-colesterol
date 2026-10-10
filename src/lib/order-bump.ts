@@ -1,4 +1,4 @@
-import imgVivicap from "@/assets/vivicap.webp";
+import imgProduto from "@/assets/cardiochek-pa.png";
 
 /**
  * Order bumps do checkout (ofertas logo acima do botão de finalizar).
@@ -26,21 +26,21 @@ export type BumpId = OrderBumpItem["id"];
 
 export const ORDER_BUMPS: readonly OrderBumpItem[] = [
   {
-    id: "vivicap",
-    name: "ViviCap",
-    fullName: "ViviCap — tampa inteligente para caneta de insulina",
-    gatewayName: "GlicoMax ViviCap",
-    price: 47.9,
-    compareAt: 89.9,
-    img: imgVivicap,
-    question: "Usa caneta de insulina? Proteja ela do calor e do frio.",
-    body: "O ViviCap é uma tampa que encaixa na caneta de insulina e mantém a temperatura segura por horas — sem geladeira, sem bolsa térmica e sem gelo. Serve em todas as canetas e cabe no bolso.",
+    id: "tiras25",
+    name: "+25 tiras",
+    fullName: "25 tiras de painel lipídico CardioChek PA",
+    gatewayName: "Pedido CardioMed",
+    price: 990,
+    compareAt: 1490,
+    img: imgProduto,
+    question: "Não fique sem tira no primeiro mês.",
+    body: "Quem começa a oferecer o check-up costuma usar as primeiras tiras mais rápido do que imaginava. Leve mais 25 tiras de painel lipídico agora, com o mesmo frete e desconto que só aparece nesta tela.",
     benefits: [
-      "Mantém a insulina na temperatura segura",
-      "Serve em todas as canetas de insulina",
-      "Sem geladeira, sem gelo, sem bateria",
+      "25 testes completos de lipidograma",
+      "Mesmo lote e mesmo envio do aparelho",
+      "Armazenamento em temperatura ambiente",
     ],
-    cta: "Sim! Quero o ViviCap por + {preco}",
+    cta: "Sim! Quero +25 tiras por + {preco}",
   },
 ];
 

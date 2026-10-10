@@ -1,9 +1,7 @@
 /**
  * Única regra de "pagamento confirmado" do site (servidor, webhook, página do pedido e admin).
- *
- * "approved" NÃO entra: a regra antiga (herdada do gateway anterior) aceitava "approved", e a
- * PixGate usa esse status para Pix gerado/ainda não pago — isso fazia pedidos pendentes virarem
- * Purchase no Meta e venda paga na UTMify.
+ * A SagacePay usa pending → paid | failed | refunded | expired; só "paid" é venda.
+ * Não aceite "approved": em alguns gateways ele significa Pix gerado e ainda não pago.
  */
 const PAID_STATUSES = new Set(["paid", "pago", "completed", "concluido", "concluida", "confirmed"]);
 

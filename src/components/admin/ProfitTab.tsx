@@ -468,7 +468,7 @@ function ProfitSettingsCard({
           <Input
             value={campaignFilter}
             onChange={(e) => setCampaignFilter(e.target.value)}
-            placeholder="glico, glicomax"
+            placeholder="cardiochek, cardio"
           />
         </label>
         <label className="text-xs text-muted-foreground space-y-1">

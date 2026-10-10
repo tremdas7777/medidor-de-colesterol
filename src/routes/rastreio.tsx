@@ -8,8 +8,11 @@ import { trackByCpf, type RastreioStatus } from "@/lib/rastreio.functions";
 export const Route = createFileRoute("/rastreio")({
   head: () => ({
     meta: [
-      { title: "Rastrear Pedido | GlicoMax" },
-      { name: "description", content: "Acompanhe a entrega do seu pedido GlicoMax pelo CPF do titular." },
+      { title: "Rastrear Pedido | CardioMed" },
+      {
+        name: "description",
+        content: "Acompanhe a entrega do seu pedido CardioMed pelo CPF do titular.",
+      },
       { property: "og:title", content: "Rastrear Pedido" },
       { property: "og:description", content: "Acompanhe a entrega do seu pedido." },
       { property: "og:url", content: "/rastreio" },
@@ -28,7 +31,11 @@ function formatCpf(v: string) {
 }
 
 const STEPS: { key: RastreioStatus; title: string; sub: string }[] = [
-  { key: "aguardando_pagamento", title: "Pedido recebido", sub: "Aguardando a confirmação do pagamento" },
+  {
+    key: "aguardando_pagamento",
+    title: "Pedido recebido",
+    sub: "Aguardando a confirmação do pagamento",
+  },
   { key: "em_preparacao", title: "Pagamento confirmado", sub: "Pedido em preparação para envio" },
   { key: "postado", title: "Postado", sub: "Entregue à transportadora — acompanhe pelo código" },
 ];
@@ -40,7 +47,11 @@ const HEADLINE: Record<RastreioStatus, string> = {
 };
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+  return new Date(iso).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 }
 
 function Page() {
@@ -88,9 +99,7 @@ function Page() {
           </form>
 
           {mutation.isError && (
-            <p className="mt-6 text-sm text-red-600">
-              {(mutation.error as Error).message}
-            </p>
+            <p className="mt-6 text-sm text-red-600">{(mutation.error as Error).message}</p>
           )}
 
           {result && !result.found && (
@@ -137,7 +146,9 @@ function Page() {
                         0{i + 1}
                       </span>
                       <div>
-                        <div className={`text-sm font-semibold ${done ? "" : "text-[var(--ink)]/40"}`}>
+                        <div
+                          className={`text-sm font-semibold ${done ? "" : "text-[var(--ink)]/40"}`}
+                        >
                           {step.title}
                         </div>
                         <div className="text-xs uppercase tracking-[0.18em] text-[var(--ink)]/40 mt-1">

@@ -26,7 +26,7 @@ export function WhatsAppFloat() {
   if (!settings?.whatsappEnabled || HIDDEN.some((r) => r.test(pathname))) return null;
 
   const href = `https://wa.me/${brand.whatsapp.phoneE164}?text=${encodeURIComponent(
-    "Olá! Quero tirar uma dúvida sobre o glicosímetro GlicoMax.",
+    "Olá! Quero tirar uma dúvida sobre o CardioChek PA.",
   )}`;
   return (
     <a

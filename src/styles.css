@@ -41,8 +41,8 @@
 :root {
   --radius: 0.875rem;
 
-  /* Editorial palette — AiDEX X */
-  --paper: #f3f8fc;
+  /* Paleta CardioMed */
+  --paper: #faf9f6;
   --surface: #ffffff;
   --ink: #0d0d0d;
 
@@ -54,17 +54,17 @@
   --popover: #ffffff;
   --popover-foreground: var(--ink);
 
-  /* Brand accent — AiDEX X lime green */
-  --primary: #0284C7;
-  --primary-dark: #0369A1;
-  --primary-deep: #075985;
+  /* Cor de ação (botões do checkout) */
+  --primary: #1f7a46;
+  --primary-dark: #18623a;
+  --primary-deep: #16181b;
   --primary-foreground: #ffffff;
-  --brand-tint: #F0F9FF;
+  --brand-tint: #faf9f6;
 
   --secondary: var(--paper);
   --secondary-foreground: var(--ink);
 
-  --muted: #e7f1f8;
+  --muted: #f0eee9;
   --muted-foreground: oklch(0.45 0 0);
 
   --accent: #ffffff;
@@ -85,9 +85,9 @@
   --card-foreground: #f5f3ee;
   --popover: #161616;
   --popover-foreground: #f5f3ee;
-  --primary: #0284C7;
-  --primary-dark: #0369A1;
-  --primary-deep: #075985;
+  --primary: #1f7a46;
+  --primary-dark: #18623a;
+  --primary-deep: #16181b;
   --primary-foreground: #ffffff;
   --brand-tint: #0b2233;
   --secondary: #1a1a1a;
@@ -211,15 +211,15 @@
 
 /* Checkout — replica do checkout antigo (verde) */
 .ck {
-  --ck-green: #16a34a;
-  --ck-footer: #075985;
-  --ck-ok: #0e8f5b;
-  --ck-field: #e8f0fe;
-  --ck-blue: #0284c7;
+  --ck-green: #1f7a46;
+  --ck-footer: #16181b;
+  --ck-ok: #1f7a46;
+  --ck-field: #f4f3ef;
+  --ck-blue: #16181b;
   --ck-pix: #32bcad;
   --ck-badge: #c9f2c0;
   font-family: "Inter", system-ui, sans-serif;
 }
-.ck { --ck-bg: #f3f8fc; background: var(--ck-bg); }
+.ck { --ck-bg: #faf9f6; background: var(--ck-bg); }
 .ck h1, .ck h2, .ck h3 { font-family: inherit; letter-spacing: normal; }
 .ck .ck-surface { background: var(--ck-bg); }

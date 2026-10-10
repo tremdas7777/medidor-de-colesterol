@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-const SESSION_KEY = "glicomax_session_id";
+const SESSION_KEY = "cardiomed_session_id";
 
 export function getSessionId(): string {
   if (typeof window === "undefined") return "ssr";
@@ -12,8 +12,16 @@ export function getSessionId(): string {
   return id;
 }
 
-const UTM_KEYS = ["src", "sck", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
-const UTM_STORE = "glicomax_utms";
+const UTM_KEYS = [
+  "src",
+  "sck",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+] as const;
+const UTM_STORE = "cardiomed_utms";
 
 /** Guarda as UTMs da primeira visita com UTM (localStorage) para enviá-las na venda. */
 export function getStoredUtms(): Record<string, string | null> {

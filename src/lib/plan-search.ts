@@ -6,7 +6,7 @@ const bundleParamSchema = z.preprocess(
   z.enum(["1", "2", "3"]),
 );
 
-/** Query string dos kits (?plano=1|2|3 — quantidade de glicosímetros). */
+/** Query string dos kits (?plano=1|2|3 — kit escolhido). */
 export const planSearchSchema = z.object({
   plano: bundleParamSchema.optional(),
 });

@@ -70,7 +70,7 @@ export const trackByCpf = createServerFn({ method: "POST" })
 
     return {
       found: true,
-      pedido: order.id.replace(/^hc_/, "").slice(-8).toUpperCase(),
+      pedido: order.id.slice(-8).toUpperCase(),
       status,
       data_pedido: order.created_at,
       tracking_code: trackingCode,

@@ -20,8 +20,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 import appCss from "../styles.css?url";
 
-const TITLE = "Glicosímetro GlicoMax | Glicose e Batimentos em Segundos";
-const DESCRIPTION = `Glicosímetro GlicoMax: mede a glicose no sangue (mg/dL) pelo sensor no dedo, sem furar, e também mostra os batimentos cardíacos em segundos, com tela colorida. Kits de 1 a 3 unidades. ${FREE_SHIPPING_LABEL}.`;
+const TITLE = "Analisador CardioChek PA | Colesterol, HDL, Triglicérides e Glicose";
+const DESCRIPTION = `Analisador CardioChek PA: colesterol total, HDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Para clínicas, farmácias e profissionais de saúde. ${FREE_SHIPPING_LABEL}.`;
 
 /** Scripts de pixel do <head> — só entram os que têm ID em src/lib/pixels.ts. */
 function pixelScripts() {
@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "keywords",
         content:
-          "glicosímetro, medidor de glicose, glicose no sangue, sem furar o dedo, sensor de glicose, frequência cardíaca, batimentos, GlicoMax",
+          "CardioChek PA, analisador de colesterol, lipidograma, perfil lipídico, point of care, teste rápido de colesterol, triglicérides, HDL, glicose, CardioMed",
       },
       { name: "robots", content: "index,follow" },
       { property: "og:site_name", content: brand.name },
@@ -134,12 +134,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             { property: "og:image", content: `${brand.siteUrl}/og-image.jpg` },
             { property: "og:image:width", content: "1200" },
             { property: "og:image:height", content: "630" },
-            { property: "og:image:alt", content: "Glicosímetro GlicoMax" },
+            { property: "og:image:alt", content: "Analisador CardioChek PA" },
             { name: "twitter:image", content: `${brand.siteUrl}/og-image.jpg` },
           ]
         : []),
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap",
+      },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", sizes: "any" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
