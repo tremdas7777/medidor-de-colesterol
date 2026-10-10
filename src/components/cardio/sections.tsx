@@ -82,7 +82,7 @@ export function Pain() {
             {[
               [
                 "O exame que sempre fica para depois",
-                "Pedir guia, marcar, jejuar 12 horas, pegar fila, tirar sangue da veia e esperar dias pelo resultado. Não é à toa que a gente adia.",
+                "Pedir guia, marcar horário, sair de casa, pegar fila, tirar sangue da veia e esperar dias pelo resultado. Não é à toa que a gente adia.",
               ],
               [
                 "Meses no escuro",
@@ -141,7 +141,6 @@ export function Race() {
                 {[
                   "pedir a guia",
                   "agendar",
-                  "jejum de 12h",
                   "deslocamento",
                   "fila",
                   "agulha na veia",

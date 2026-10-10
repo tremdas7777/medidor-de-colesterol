@@ -1,4 +1,4 @@
-import imgProduto from "@/assets/cardiochek-pa.png";
+import imgTiras from "@/assets/tiras-lipid-panel.webp";
 
 /**
  * Order bumps do checkout (ofertas logo acima do botão de finalizar).
@@ -32,7 +32,7 @@ export const ORDER_BUMPS: readonly OrderBumpItem[] = [
     gatewayName: "Pedido CardioMed",
     price: 990,
     compareAt: 1490,
-    img: imgProduto,
+    img: imgTiras,
     question: "Garanta as próximas medições com desconto.",
     body: "Quem começa a medir em casa quer acompanhar a evolução: depois de mudar a alimentação, de começar a caminhar, de ajustar o remédio. Leve mais 25 tiras agora, no mesmo envio, com o desconto que só aparece nesta tela.",
     benefits: [

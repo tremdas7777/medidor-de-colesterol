@@ -24,7 +24,7 @@ export const PERSONAS = [
   {
     img: imgCuidarPais,
     title: "Cuida dos pais",
-    pain: "Levar pai ou mãe ao laboratório é um dia inteiro: transporte, jejum, fila e agulha.",
+    pain: "Levar pai ou mãe ao laboratório é um dia inteiro: transporte, fila, agulha e espera.",
     gain: "Meça em casa, no sofá, em 90 segundos. Sem tirar ninguém de casa.",
   },
   {
@@ -149,7 +149,7 @@ export const FAQ = [
   },
   {
     q: "Precisa de jejum?",
-    a: "Siga a orientação do seu médico. O jejum costuma importar principalmente para o triglicérides. O mais importante é medir sempre do mesmo jeito, para comparar um mês com o outro.",
+    a: "Para o perfil completo, o fabricante recomenda jejum de 12 horas (só água), igual ao exame de laboratório: o triglicérides muda bastante depois de comer. Siga também a orientação do seu médico e meça sempre nas mesmas condições, para comparar um mês com o outro.",
   },
   {
     q: "Quantas vezes posso medir?",
