@@ -1,13 +1,21 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { getPixGatewayState, PIX_GATEWAYS, savePixGateway } from "./pix-gateway.server";
 import {
   deleteSagacePayKey,
   getSagacePayKeySource,
   saveSagacePayKey,
   testSagacePayKey,
 } from "./sagacepay.server";
+import {
+  deletePixgateKey,
+  getPixgateKeySource,
+  savePixgateKey,
+  testPixgateKey,
+} from "./pixgate.server";
 
 const pw = z.object({ password: z.string().min(1).max(200) });
+const gw = z.object({ gateway: z.enum(PIX_GATEWAYS) });
 
 function assertAdmin(password: string) {
   if (password !== process.env["ADMIN_PASSWORD"]) throw new Error("Não autorizado");
@@ -18,35 +26,74 @@ function mask(token: string): string {
   return `${token.slice(0, 4)}••••${token.slice(-4)}`;
 }
 
-/** Chave da SagacePay em uso (mascarada) e de onde ela vem. */
-export const getSagacePayStatus = createServerFn({ method: "POST" })
+const KEYS = {
+  sagacepay: {
+    source: getSagacePayKeySource,
+    save: saveSagacePayKey,
+    remove: deleteSagacePayKey,
+    test: testSagacePayKey,
+  },
+  pixgate: {
+    source: getPixgateKeySource,
+    save: savePixgateKey,
+    remove: deletePixgateKey,
+    test: testPixgateKey,
+  },
+} as const;
+
+/** Gateway escolhido, gateway em uso e a chave de cada um (mascarada) com a origem. */
+export const getPixGatewayStatus = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => pw.parse(d))
   .handler(async ({ data }) => {
     assertAdmin(data.password);
-    const { key, source } = await getSagacePayKeySource();
-    return { key: key ? mask(key) : null, source };
+    const [state, sagacepay, pixgate] = await Promise.all([
+      getPixGatewayState(),
+      KEYS.sagacepay.source(),
+      KEYS.pixgate.source(),
+    ]);
+    return {
+      ...state,
+      keys: {
+        sagacepay: { key: sagacepay.key ? mask(sagacepay.key) : null, source: sagacepay.source },
+        pixgate: { key: pixgate.key ? mask(pixgate.key) : null, source: pixgate.source },
+      },
+    };
   });
 
-export const saveSagacePayKeyFn = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => pw.extend({ key: z.string().trim().min(10).max(500) }).parse(d))
+/** Troca o gateway dos Pix NOVOS. Pix já gerados continuam no gateway em que nasceram. */
+export const setPixGatewayFn = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => pw.merge(gw).parse(d))
   .handler(async ({ data }) => {
     assertAdmin(data.password);
-    await saveSagacePayKey(data.key);
+    await savePixGateway(data.gateway);
     return { ok: true };
   });
 
-export const deleteSagacePayKeyFn = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => pw.parse(d))
+export const saveGatewayKeyFn = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) =>
+    pw
+      .merge(gw)
+      .extend({ key: z.string().trim().min(10).max(500) })
+      .parse(d),
+  )
   .handler(async ({ data }) => {
     assertAdmin(data.password);
-    await deleteSagacePayKey();
+    await KEYS[data.gateway].save(data.key);
     return { ok: true };
   });
 
-/** Valida a chave da SagacePay sem gerar cobrança nenhuma. */
-export const testSagacePayFn = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => pw.parse(d))
+export const deleteGatewayKeyFn = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => pw.merge(gw).parse(d))
   .handler(async ({ data }) => {
     assertAdmin(data.password);
-    return testSagacePayKey();
+    await KEYS[data.gateway].remove();
+    return { ok: true };
+  });
+
+/** Valida a chave do gateway sem gerar cobrança nenhuma. */
+export const testGatewayKeyFn = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => pw.merge(gw).parse(d))
+  .handler(async ({ data }) => {
+    assertAdmin(data.password);
+    return KEYS[data.gateway].test();
   });

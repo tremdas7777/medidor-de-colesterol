@@ -1,6 +1,6 @@
 /**
  * Regra de preço do checkout (usada no servidor para cobrar e no cliente só para exibir).
- * A loja só recebe Pix (SagacePay): o total é produtos + frete, sem desconto por forma de pagamento.
+ * A loja só recebe Pix (SagacePay ou PixGate): o total é produtos + frete, sem desconto por forma de pagamento.
  */
 export function checkoutTotals(o: { products: number; frete: number }) {
   const products = Math.round(o.products * 100);

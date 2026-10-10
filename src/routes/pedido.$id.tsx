@@ -26,7 +26,7 @@ type DataLayerWindow = Window & {
   ttq?: { track: (event: string, data?: Record<string, unknown>) => void };
 };
 
-/** Status finais da SagacePay (além de "paid"): param a consulta automática. */
+/** Status finais do gateway (além de "paid"): param a consulta automática. */
 const FINAL = ["failed", "refunded", "expired"];
 
 function Page() {
@@ -59,7 +59,7 @@ function Page() {
               : undefined,
         },
       }),
-    // Para de consultar quando a SagacePay dá uma resposta final (pago, expirado ou recusado).
+    // Para de consultar quando o gateway dá uma resposta final (pago, expirado ou recusado).
     refetchInterval: (q) =>
       q.state.data?.paid || FINAL.includes(q.state.data?.status ?? "") ? false : 5000,
     enabled: !!id,
@@ -236,7 +236,7 @@ function WaitingPix({ session }: { session: PixSession | null }) {
   );
 }
 
-/** Pix da SagacePay venceu sem pagamento: gera outro pelo checkout, com o mesmo kit. */
+/** Pix venceu sem pagamento: gera outro pelo checkout, com o mesmo kit. */
 function Expired({ bundleId }: { bundleId?: string }) {
   const plano = bundleId === "1" || bundleId === "2" || bundleId === "3" ? bundleId : undefined;
   return (

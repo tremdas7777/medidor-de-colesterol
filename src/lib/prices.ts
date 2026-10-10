@@ -4,7 +4,7 @@
  * o que estiver salvo no banco (site_settings "prices") substitui o padrão.
  *
  * O servidor sempre recarrega do banco antes de cobrar (prices.server.ts), então o valor cobrado
- * na SagacePay é sempre o do painel. O navegador recebe os mesmos preços pelo loader da raiz só
+ * no gateway do Pix é sempre o do painel. O navegador recebe os mesmos preços pelo loader da raiz só
  * para exibir.
  */
 import { z } from "zod";

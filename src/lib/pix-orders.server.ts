@@ -161,7 +161,7 @@ export async function reportPendingToUtmify(o: {
 
 export { isPaidStatus };
 
-/** Consulta o status real na SagacePay. */
+/** Consulta o status real no gateway em que o Pix foi gerado (SagacePay ou PixGate). */
 export async function fetchGatewayStatus(id: string): Promise<{ status: string; amount: number }> {
   return fetchPixStatus(id);
 }

@@ -117,7 +117,7 @@ export const createPixCharge = createServerFn({ method: "POST" })
     });
     const amount = totals.total;
     const { ip, ua } = requestMeta();
-    // Pix gerado na SagacePay.
+    // Pix gerado no gateway escolhido no /admin (SagacePay ou PixGate).
     const charge = await createPix({
       amount,
       customer: { name: data.name, email: data.email, phone: data.phone, cpf: data.cpf },
