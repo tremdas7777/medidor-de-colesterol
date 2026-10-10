@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
 import { CardioHome } from "@/components/cardio/Home";
 
-const TITLE = "CardioChek PA | Meça seu colesterol em casa em 90 segundos";
+const TITLE = "Medidor de Colesterol CardioChek PA | Resultado em 90 segundos, em casa";
 const DESCRIPTION =
   "Saiba como estão seu colesterol, HDL, triglicérides e glicose em casa, com uma gota de sangue do dedo e resultado em 90 segundos. Frete grátis e 7 dias para devolver.";
 

@@ -66,9 +66,9 @@ function Page() {
               {main && (
                 <div className="flex justify-between gap-3">
                   <div>
-                    <p className="font-medium">{main.bundleName} — Analisador CardioChek PA</p>
+                    <p className="font-medium">{main.bundleName} — Medidor de Colesterol CardioChek PA</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      {main.units ? "Analisador CardioChek PA" : "Itens adicionais"}
+                      {main.units ? "Medidor de Colesterol CardioChek PA" : "Itens adicionais"}
                     </p>
                     {(main.bumps ?? (main.bump ? [main.bump] : [])).map((b) => (
                       <p key={b.name} className="mt-0.5 text-muted-foreground">

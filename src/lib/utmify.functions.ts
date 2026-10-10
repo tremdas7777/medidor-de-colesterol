@@ -62,7 +62,7 @@ export const sendUtmifyTest = createServerFn({ method: "POST" })
         phone: "11999999999",
         document: "52998224725",
       },
-      product: { id: "2", name: "Analisador CardioChek PA - Kit Inicial" },
+      product: { id: "2", name: "Medidor de Colesterol CardioChek PA - Kit Inicial" },
       amountCents: 649000,
       utm: { utm_source: "teste" },
     });

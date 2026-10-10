@@ -140,7 +140,7 @@ export function Device({
   const [k, v] = LCD_SEQUENCE[i]!;
   return (
     <div className={`dev ${float ? "float" : ""} ${className}`}>
-      <img src={deviceCutout} alt="Analisador CardioChek PA" width={293} height={606} />
+      <img src={deviceCutout} alt="Medidor de Colesterol CardioChek PA" width={293} height={606} />
       <div className="dev-lcd" aria-hidden>
         <span className="k">{k}</span>
         <span className="v" key={i}>

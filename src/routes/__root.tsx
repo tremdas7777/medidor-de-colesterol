@@ -22,8 +22,8 @@ import { applyPrices } from "@/lib/prices";
 
 import appCss from "../styles.css?url";
 
-const TITLE = "CardioChek PA | Meça seu colesterol em casa em 90 segundos";
-const DESCRIPTION = `Analisador CardioChek PA: colesterol total, HDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Para acompanhar em casa, com a família. ${FREE_SHIPPING_LABEL}.`;
+const TITLE = "Medidor de Colesterol CardioChek PA | Resultado em 90 segundos, em casa";
+const DESCRIPTION = `Medidor de Colesterol CardioChek PA: colesterol total, HDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Para acompanhar em casa, com a família. ${FREE_SHIPPING_LABEL}.`;
 
 /** Scripts de pixel do <head> — só entram os que têm ID em src/lib/pixels.ts. */
 function pixelScripts() {
@@ -119,7 +119,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "keywords",
         content:
-          "CardioChek PA, medidor de colesterol, medir colesterol em casa, aparelho de colesterol, triglicérides, HDL, LDL, glicose, CardioMed",
+          "Medidor de Colesterol CardioChek PA, CardioChek PA, medidor de colesterol, medir colesterol em casa, aparelho de colesterol, triglicérides, HDL, LDL, glicose, CardioMed",
       },
       { name: "robots", content: "index,follow" },
       { property: "og:site_name", content: brand.name },
@@ -136,7 +136,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             { property: "og:image", content: `${brand.siteUrl}/og-image.jpg` },
             { property: "og:image:width", content: "1200" },
             { property: "og:image:height", content: "630" },
-            { property: "og:image:alt", content: "Analisador CardioChek PA" },
+            { property: "og:image:alt", content: "Medidor de Colesterol CardioChek PA" },
             { name: "twitter:image", content: `${brand.siteUrl}/og-image.jpg` },
           ]
         : []),

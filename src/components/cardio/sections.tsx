@@ -423,16 +423,16 @@ export function DoctorBand() {
 
 /* ---------- Kits em cartões (home) ---------- */
 const KIT_ITEMS: Record<string, string[]> = {
-  "1": ["Analisador CardioChek PA", "Garantia de 12 meses", "Videoaula de uso"],
+  "1": ["Medidor de Colesterol CardioChek PA", "Garantia de 12 meses", "Videoaula de uso"],
   "2": [
-    "Analisador CardioChek PA",
+    "Medidor de Colesterol CardioChek PA",
     "25 tiras de painel lipídico",
     "Lancetas e capilares",
     "Solução controle",
     "Guia, planilha e suporte no WhatsApp",
   ],
   "3": [
-    "Analisador CardioChek PA",
+    "Medidor de Colesterol CardioChek PA",
     "75 tiras de painel lipídico",
     "Lancetas e capilares",
     "Solução controle e estojo",
@@ -678,7 +678,7 @@ export function Bonus() {
 /* ---------- Tabela de kits (produto) ---------- */
 export function KitTable() {
   const rows: [string, (b: Bundle) => boolean | string][] = [
-    ["Analisador CardioChek PA", () => true],
+    ["Medidor de Colesterol CardioChek PA", () => true],
     ["Tiras de painel lipídico", (b) => (b.strips ? String(b.strips) : false)],
     ["Lancetas e capilares", (b) => b.includes.lancetas],
     ["Solução controle", (b) => b.includes.controle],

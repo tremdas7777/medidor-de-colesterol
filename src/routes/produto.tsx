@@ -9,13 +9,13 @@ export const Route = createFileRoute("/produto")({
   validateSearch: planSearchSchema,
   head: () => ({
     meta: [
-      { title: "Analisador CardioChek PA | Kits e preços" },
+      { title: "Medidor de Colesterol CardioChek PA | Kits, preço e como usar" },
       {
         name: "description",
         content:
           "CardioChek PA para usar em casa: colesterol total, HDL, LDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Kits com tiras, frete grátis e 7 dias para devolver.",
       },
-      { property: "og:title", content: "Analisador CardioChek PA" },
+      { property: "og:title", content: "Medidor de Colesterol CardioChek PA" },
       { property: "og:url", content: "/produto" },
       { property: "og:image", content: productHeroImage },
       { property: "og:type", content: "website" },

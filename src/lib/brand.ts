@@ -1,7 +1,7 @@
 /** Marca da loja — CardioMed (revenda do analisador CardioChek PA para uso em casa) */
 export const brand = {
   name: "CardioMed",
-  productName: "Analisador CardioChek PA",
+  productName: "Medidor de Colesterol CardioChek PA",
   /** Descrição genérica enviada ao gateway na cobrança (sem detalhes do produto). */
   chargeDescription: "Pedido CardioMed",
   tagline: "Seu colesterol e glicose em 90 segundos, em casa",
