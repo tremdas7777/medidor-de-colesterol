@@ -21,7 +21,7 @@ export const Route = createFileRoute("/faq")({
     <SiteLayout>
       <div className="cm">
         <Faq id="faq" />
-        <Closing bundle={getBundle(DEFAULT_BUNDLE_ID)} />
+        <Closing bundle={getBundle(DEFAULT_BUNDLE_ID)} target="product" />
       </div>
     </SiteLayout>
   ),

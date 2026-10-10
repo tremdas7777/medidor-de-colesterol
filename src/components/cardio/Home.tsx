@@ -11,7 +11,7 @@ import {
   DoctorBand,
   ExitIntent,
   Faq,
-  goToCheckout,
+  goToProduct,
   Guarantee,
   KitCards,
   off,
@@ -53,11 +53,7 @@ function Hero() {
             descobre em casa, em 90 segundos.
           </p>
           <div className="ctas">
-            <button
-              type="button"
-              className="btn btn-buy"
-              onClick={() => goToCheckout(bundle, "hero_1")}
-            >
+            <button type="button" className="btn btn-buy" onClick={() => goToProduct(bundle)}>
               Quero medir em casa
             </button>
             <button type="button" className="btn btn-ghost" onClick={() => scrollTo("como")}>
@@ -82,11 +78,7 @@ function Hero() {
             agulha na veia, sem fila, sem esperar dias.
           </p>
           <div className="ctas">
-            <button
-              type="button"
-              className="btn btn-buy"
-              onClick={() => goToCheckout(bundle, "hero_2")}
-            >
+            <button type="button" className="btn btn-buy" onClick={() => goToProduct(bundle)}>
               Comprar agora
             </button>
             <button type="button" className="btn btn-ghost" onClick={() => scrollTo("aparelho")}>
@@ -113,11 +105,7 @@ function Hero() {
             )}
           </div>
           <div className="ctas">
-            <button
-              type="button"
-              className="btn btn-buy"
-              onClick={() => goToCheckout(bundle, "hero_3")}
-            >
+            <button type="button" className="btn btn-buy" onClick={() => goToProduct(bundle)}>
               Garantir o meu
             </button>
             <button type="button" className="btn btn-ghost" onClick={() => scrollTo("kits")}>
@@ -207,8 +195,8 @@ export function CardioHome() {
       <KitCards />
       <Guarantee />
       <Faq limit={6} />
-      <Closing bundle={bundle} />
-      <StickyBuy bundle={bundle} anchor=".cm .hero" />
+      <Closing bundle={bundle} target="product" />
+      <StickyBuy bundle={bundle} anchor=".cm .hero" target="product" />
       <ExitIntent />
     </div>
   );

@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { brand } from "@/lib/brand";
 import { DEFAULT_BUNDLE_ID, FREE_SHIPPING_LABEL, getBundle } from "@/lib/bundles";
-import { trackCheckoutClick } from "@/lib/analytics";
 import "./cardio.css";
 
 /** Barra fina do topo + cabeçalho. Fica no topo de todas as páginas da vitrine. */
@@ -34,18 +33,7 @@ export function CardioHeader() {
             <a href="/#kits">Kits</a>
             <Link to="/rastreio">Rastrear pedido</Link>
           </nav>
-          <a
-            className="btn btn-buy buy"
-            href={b.checkoutUrl}
-            onClick={() =>
-              trackCheckoutClick({
-                source: "header",
-                bundleId: b.id,
-                bundleName: b.name,
-                value: b.price,
-              })
-            }
-          >
+          <a className="btn btn-buy buy" href={`/produto?plano=${b.id}`}>
             Comprar
           </a>
         </div>

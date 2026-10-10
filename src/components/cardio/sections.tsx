@@ -18,6 +18,17 @@ export function goToCheckout(b: Bundle, source: string) {
   window.location.href = b.checkoutUrl;
 }
 
+/** Página do produto com o kit já selecionado (botões de compra da home). */
+export const productUrl = (b: Bundle) => `/produto?plano=${b.id}`;
+export function goToProduct(b: Bundle) {
+  window.location.href = productUrl(b);
+}
+
+/** Destino dos botões de compra: na home vai para o produto; no produto, para o checkout. */
+export type BuyTarget = "product" | "checkout";
+const buy = (target: BuyTarget, b: Bundle, source: string) =>
+  target === "product" ? goToProduct(b) : goToCheckout(b, source);
+
 export const scrollTo = (id: string) =>
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
@@ -383,13 +394,10 @@ export function KitCards() {
                 <button
                   type="button"
                   className={`btn ${b.featured ? "btn-buy" : "btn-line"}`}
-                  onClick={() => goToCheckout(b, "home_kits")}
+                  onClick={() => goToProduct(b)}
                 >
                   Comprar {b.short}
                 </button>
-                <a className="lnk" href={`/produto?plano=${b.id}`}>
-                  ver detalhes do kit
-                </a>
               </div>
             );
           })}
@@ -803,7 +811,7 @@ export function Faq({ id = "duvidas", limit }: { id?: string; limit?: number }) 
   );
 }
 
-export function Closing({ bundle }: { bundle: Bundle }) {
+export function Closing({ bundle, target = "checkout" }: { bundle: Bundle; target?: BuyTarget }) {
   return (
     <section className="sec closing">
       <div className="wrap grid">
@@ -826,7 +834,7 @@ export function Closing({ bundle }: { bundle: Bundle }) {
           <button
             type="button"
             className="btn btn-buy"
-            onClick={() => goToCheckout(bundle, "closing")}
+            onClick={() => buy(target, bundle, "closing")}
           >
             Comprar agora
           </button>
@@ -837,7 +845,15 @@ export function Closing({ bundle }: { bundle: Bundle }) {
 }
 
 /** Barra de compra fixa no celular, quando `anchor` (seletor) sai da tela. */
-export function StickyBuy({ bundle, anchor }: { bundle: Bundle; anchor: string }) {
+export function StickyBuy({
+  bundle,
+  anchor,
+  target = "checkout",
+}: {
+  bundle: Bundle;
+  anchor: string;
+  target?: BuyTarget;
+}) {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const el = document.querySelector(anchor);
@@ -857,7 +873,7 @@ export function StickyBuy({ bundle, anchor }: { bundle: Bundle; anchor: string }
       <button
         type="button"
         className="btn btn-buy"
-        onClick={() => goToCheckout(bundle, "sticky_mobile")}
+        onClick={() => buy(target, bundle, "sticky_mobile")}
       >
         Comprar
       </button>
