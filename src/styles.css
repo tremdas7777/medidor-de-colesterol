@@ -63,15 +63,15 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --background: oklch(0.985 0.008 190);
+  --foreground: oklch(0.22 0.04 220);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
+  --primary: oklch(0.55 0.11 190);
+  --primary-foreground: oklch(0.99 0.005 190);
+  --secondary: oklch(0.95 0.03 190);
   --secondary-foreground: oklch(0.208 0.042 265.755);
   --muted: oklch(0.968 0.007 247.896);
   --muted-foreground: oklch(0.554 0.046 257.417);
@@ -132,7 +132,14 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+@theme inline {
+  --font-display: "Outfit", sans-serif;
+  --font-sans: "Figtree", sans-serif;
+}
+
 @layer base {
+  h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  body { font-family: var(--font-sans); }
   * {
     border-color: var(--color-border);
   }
