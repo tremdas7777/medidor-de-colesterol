@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { availableBundles, brl, type Bundle } from "@/lib/bundles";
@@ -380,13 +381,13 @@ export function KitCards() {
                     <li key={t}>{t}</li>
                   ))}
                 </ul>
-                <button
-                  type="button"
+                <Link
+                  to="/produto"
+                  search={{ plano: b.id }}
                   className={`btn ${b.featured ? "btn-buy" : "btn-line"}`}
-                  onClick={() => goToCheckout(b, "home_kits")}
                 >
                   Comprar {b.short}
-                </button>
+                </Link>
                 <a className="lnk" href={`/produto?plano=${b.id}`}>
                   ver detalhes do kit
                 </a>
@@ -823,13 +824,9 @@ export function Closing({ bundle }: { bundle: Bundle }) {
             <div className="pp">{brl(bundle.price)}</div>
             <div style={{ color: "var(--cm-muted)", fontSize: ".88rem" }}>{bundle.description}</div>
           </div>
-          <button
-            type="button"
-            className="btn btn-buy"
-            onClick={() => goToCheckout(bundle, "closing")}
-          >
+          <Link to="/produto" className="btn btn-buy">
             Comprar agora
-          </button>
+          </Link>
         </div>
       </div>
     </section>
@@ -854,13 +851,9 @@ export function StickyBuy({ bundle, anchor }: { bundle: Bundle; anchor: string }
         <b>{brl(bundle.price)}</b>
         <small>{bundle.name} · Pix</small>
       </div>
-      <button
-        type="button"
-        className="btn btn-buy"
-        onClick={() => goToCheckout(bundle, "sticky_mobile")}
-      >
+      <Link to="/produto" className="btn btn-buy">
         Comprar
-      </button>
+      </Link>
     </div>
   );
 }
