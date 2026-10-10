@@ -2,9 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
-import { CircleCheck, Loader2, ShieldCheck } from "lucide-react";
+import { CircleCheck, Loader2, Printer, ShieldCheck } from "lucide-react";
 import { getBundle } from "@/lib/bundles";
-import { brand } from "@/lib/brand";
 import { createUpsellCharge } from "@/lib/pix.functions";
 import { loadPixSession, savePixSession, type PixSession } from "@/lib/pix-session";
 import {
@@ -15,7 +14,7 @@ import {
   upsellSelection,
   type UpsellProduct,
 } from "@/lib/upsell";
-import { brl, PRODUCT_IMG } from "@/components/checkout/parts";
+import { brl } from "@/components/checkout/parts";
 import { Shell } from "@/components/checkout/OrderShell";
 
 export const Route = createFileRoute("/upsell/$id")({
@@ -26,7 +25,7 @@ export const Route = createFileRoute("/upsell/$id")({
 });
 
 /**
- * Ofertas pós-compra: pacote de tiras com desconto e seguro de entrega.
+ * Ofertas pós-compra: impressora de resultados e seguro de entrega.
  * O cliente marca uma, as duas ou nenhuma; o que marcou vai numa cobrança só. Depois (comprando ou
  * não) vem a página do envio expresso — ver /expresso:
  * cobrado num Pix separado.
@@ -122,20 +121,16 @@ function Page() {
 
         <Offer checked={chosen.includes("kit")} onToggle={() => toggle("kit")}>
           <div className="flex items-center gap-4">
-            <img
-              src={PRODUCT_IMG}
-              alt={brand.productName}
-              width={80}
-              height={80}
-              className="h-20 w-20 shrink-0 rounded-lg border border-border bg-white object-contain"
-            />
+            <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-border bg-white">
+              <Printer className="h-10 w-10 text-foreground" strokeWidth={1.5} aria-hidden />
+            </span>
             <div>
               <p className="text-[12px] font-bold uppercase tracking-wide text-[var(--ck-ok)]">
                 {off > 0 ? `Só nesta tela: ${off}% OFF` : "Só nesta tela"}
               </p>
-              <p className="text-[15px] font-semibold">+{UPSELL_PACK.name}</p>
+              <p className="text-[15px] font-semibold">+ {UPSELL_PACK.fullName}</p>
               <p className="text-[13px] text-muted-foreground">
-                {UPSELL_PACK.strips} medições completas de colesterol
+                Acessório oficial do CardioChek PA · papel ou etiqueta
               </p>
               <div className="mt-1 flex flex-wrap items-baseline gap-x-2">
                 {UPSELL_PACK.listPrice > price && (
@@ -148,10 +143,10 @@ function Page() {
             </div>
           </div>
           <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
-            Quem começa a medir em casa quer acompanhar mês a mês, e muitas vezes a família toda
-            quer medir também.{" "}
-            <b className="text-foreground">Garanta as tiras dos próximos meses</b> com o maior
-            desconto da loja. Vai no mesmo envio, sem frete extra.
+            Chega de anotar número em papel solto.{" "}
+            <b className="text-foreground">Imprima cada resultado com data e hora</b> e leve ao
+            médico um histórico organizado. Imprime direto da memória do aparelho, que guarda até 30
+            medições por exame. Vai no mesmo envio, sem frete extra.
           </p>
         </Offer>
 

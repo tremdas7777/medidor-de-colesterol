@@ -1,19 +1,21 @@
 import type { Bundle } from "@/lib/bundles";
 
 /**
- * Pacote oferecido na tela pós-compra (Pix): 50 tiras de painel lipídico com desconto.
- * Preço e preço "de" editáveis no /admin → Preços.
+ * Oferta principal da tela pós-compra (Pix): impressora de resultados CardioChek/PTS Connect,
+ * acessório oficial do CardioChek PA (imprime em papel ou etiqueta, direto da memória do aparelho).
+ * Diferente do order bump (tiras). Preço e preço "de" editáveis no /admin → Preços.
+ * O id interno da oferta continua "kit" (item físico, vai no mesmo envio e para o rastreio).
  */
 export const UPSELL_PACK = {
-  strips: 50,
-  name: "50 tiras de painel lipídico",
+  name: "Impressora de resultados",
+  fullName: "Impressora CardioChek/PTS Connect",
   /** Preço cobrado. */
-  price: 1788,
+  price: 790,
   /** Preço de tabela (riscado). */
-  listPrice: 2980,
+  listPrice: 1190,
 };
 
-/** Desconto do pacote em relação ao preço de tabela (0 a 1). */
+/** Desconto da oferta em relação ao preço de tabela (0 a 1). */
 export const upsellDiscount = () =>
   UPSELL_PACK.listPrice > UPSELL_PACK.price ? 1 - UPSELL_PACK.price / UPSELL_PACK.listPrice : 0;
 
