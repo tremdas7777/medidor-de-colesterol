@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { brl, DEFAULT_BUNDLE_ID, getBundle } from "@/lib/bundles";
 import { metaTrack } from "@/lib/meta-pixel";
 import imgCasal from "@/assets/casal.webp";
@@ -11,7 +12,6 @@ import {
   DoctorBand,
   ExitIntent,
   Faq,
-  goToCheckout,
   Guarantee,
   KitCards,
   off,
@@ -53,13 +53,9 @@ function Hero() {
             descobre em casa, em 90 segundos.
           </p>
           <div className="ctas">
-            <button
-              type="button"
-              className="btn btn-buy"
-              onClick={() => goToCheckout(bundle, "hero_1")}
-            >
+            <Link to="/produto" className="btn btn-buy">
               Quero medir em casa
-            </button>
+            </Link>
             <button type="button" className="btn btn-ghost" onClick={() => scrollTo("como")}>
               Ver como funciona
             </button>
@@ -82,13 +78,9 @@ function Hero() {
             agulha na veia, sem fila, sem esperar dias.
           </p>
           <div className="ctas">
-            <button
-              type="button"
-              className="btn btn-buy"
-              onClick={() => goToCheckout(bundle, "hero_2")}
-            >
+            <Link to="/produto" className="btn btn-buy">
               Comprar agora
-            </button>
+            </Link>
             <button type="button" className="btn btn-ghost" onClick={() => scrollTo("aparelho")}>
               Conhecer o aparelho
             </button>
@@ -113,13 +105,9 @@ function Hero() {
             )}
           </div>
           <div className="ctas">
-            <button
-              type="button"
-              className="btn btn-buy"
-              onClick={() => goToCheckout(bundle, "hero_3")}
-            >
+            <Link to="/produto" className="btn btn-buy">
               Garantir o meu
-            </button>
+            </Link>
             <button type="button" className="btn btn-ghost" onClick={() => scrollTo("kits")}>
               Ver todos os kits
             </button>
