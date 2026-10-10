@@ -1,15 +1,12 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
-import { CardioStore } from "@/components/cardio/Store";
-import { DEFAULT_BUNDLE_ID, parseBundleId, type BundleId } from "@/lib/bundles";
-import { planSearchSchema } from "@/lib/plan-search";
+import { CardioHome } from "@/components/cardio/Home";
 
-const TITLE = "Analisador CardioChek PA | Colesterol, HDL, Triglicérides e Glicose";
+const TITLE = "CardioChek PA | Meça seu colesterol em casa em 90 segundos";
 const DESCRIPTION =
-  "CardioChek PA: perfil lipídico e glicose com uma gota de sangue, resultado em até 90 segundos. Frete grátis, nota fiscal e Pix com aprovação na hora.";
+  "Saiba como estão seu colesterol, HDL, triglicérides e glicose em casa, com uma gota de sangue do dedo e resultado em 90 segundos. Frete grátis e 7 dias para devolver.";
 
 export const Route = createFileRoute("/")({
-  validateSearch: planSearchSchema,
   head: () => ({
     meta: [
       { title: TITLE },
@@ -26,14 +23,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/" });
-  const selected = parseBundleId(search.plano) ?? DEFAULT_BUNDLE_ID;
-  const onSelect = (id: BundleId) =>
-    navigate({ search: (prev) => ({ ...prev, plano: id }), replace: true, resetScroll: false });
   return (
     <SiteLayout>
-      <CardioStore selected={selected} onSelect={onSelect} />
+      <CardioHome />
     </SiteLayout>
   );
 }

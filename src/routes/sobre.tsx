@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
-import { consultaImage } from "@/lib/product-images";
+import imgCuidar from "@/assets/cuidar-pais.webp";
 import { brand } from "@/lib/brand";
 
 export const Route = createFileRoute("/sobre")({
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/sobre")({
       { title: `Sobre a ${brand.name}` },
       {
         name: "description",
-        content: `A ${brand.name} vende equipamentos de diagnóstico rápido para clínicas, farmácias e profissionais de saúde.`,
+        content: `A ${brand.name} leva para casa aparelhos para acompanhar colesterol e glicose.`,
       },
       { property: "og:title", content: `Sobre a ${brand.name}` },
       { property: "og:url", content: "/sobre" },
@@ -27,22 +27,18 @@ function Page() {
           <div className="wrap how">
             <div>
               <span className="label">Sobre</span>
-              <h1 className="h2">Exame na hora, dentro do seu atendimento.</h1>
+              <h1 className="h2">Saber como está o coração não devia esperar o exame do ano.</h1>
               <p className="lead">
-                A {brand.name} leva equipamentos de diagnóstico rápido para clínicas, farmácias,
-                nutricionistas e empresas. Nosso trabalho não termina na entrega: a gente ajuda a
-                implantar o serviço, precificar o teste e atender com segurança.
+                A {brand.name} leva para dentro de casa aparelhos que antes ficavam só no
+                consultório, para você acompanhar seus números e os da sua família entre uma
+                consulta e outra.
               </p>
               <p className="lead">
                 Vendemos o que conhecemos, com nota fiscal, garantia e atendimento humano do pedido
-                até o primeiro paciente.
+                até a sua primeira medição.
               </p>
             </div>
-            <img
-              src={consultaImage}
-              alt="Profissional de saúde atendendo paciente"
-              loading="lazy"
-            />
+            <img src={imgCuidar} alt="Filha cuidando do pai em casa" loading="lazy" />
           </div>
         </section>
       </div>

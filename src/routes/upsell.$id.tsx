@@ -135,7 +135,7 @@ function Page() {
               </p>
               <p className="text-[15px] font-semibold">+{UPSELL_PACK.name}</p>
               <p className="text-[13px] text-muted-foreground">
-                {UPSELL_PACK.strips} testes completos de lipidograma
+                {UPSELL_PACK.strips} medições completas de colesterol
               </p>
               <div className="mt-1 flex flex-wrap items-baseline gap-x-2">
                 {UPSELL_PACK.listPrice > price && (
@@ -148,8 +148,9 @@ function Page() {
             </div>
           </div>
           <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
-            Quem começa a oferecer o check-up usa as tiras mais rápido do que imagina.{" "}
-            <b className="text-foreground">Garanta o estoque dos próximos meses</b> com o maior
+            Quem começa a medir em casa quer acompanhar mês a mês, e muitas vezes a família toda
+            quer medir também.{" "}
+            <b className="text-foreground">Garanta as tiras dos próximos meses</b> com o maior
             desconto da loja. Vai no mesmo envio, sem frete extra.
           </p>
         </Offer>

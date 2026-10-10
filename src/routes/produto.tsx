@@ -13,14 +13,14 @@ export const Route = createFileRoute("/produto")({
       {
         name: "description",
         content:
-          "Compre o analisador CardioChek PA: colesterol total, HDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Kits com tiras e frete grátis.",
+          "CardioChek PA para usar em casa: colesterol total, HDL, LDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Kits com tiras, frete grátis e 7 dias para devolver.",
       },
       { property: "og:title", content: "Analisador CardioChek PA" },
       { property: "og:url", content: "/produto" },
       { property: "og:image", content: productHeroImage },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "/produto" }],
   }),
   component: Page,
 });

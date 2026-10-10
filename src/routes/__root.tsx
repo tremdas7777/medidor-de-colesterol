@@ -22,8 +22,8 @@ import { applyPrices } from "@/lib/prices";
 
 import appCss from "../styles.css?url";
 
-const TITLE = "Analisador CardioChek PA | Colesterol, HDL, Triglicérides e Glicose";
-const DESCRIPTION = `Analisador CardioChek PA: colesterol total, HDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Para clínicas, farmácias e profissionais de saúde. ${FREE_SHIPPING_LABEL}.`;
+const TITLE = "CardioChek PA | Meça seu colesterol em casa em 90 segundos";
+const DESCRIPTION = `Analisador CardioChek PA: colesterol total, HDL, triglicérides e glicose com uma gota de sangue, em até 90 segundos. Para acompanhar em casa, com a família. ${FREE_SHIPPING_LABEL}.`;
 
 /** Scripts de pixel do <head> — só entram os que têm ID em src/lib/pixels.ts. */
 function pixelScripts() {
@@ -119,7 +119,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "keywords",
         content:
-          "CardioChek PA, analisador de colesterol, lipidograma, perfil lipídico, point of care, teste rápido de colesterol, triglicérides, HDL, glicose, CardioMed",
+          "CardioChek PA, medidor de colesterol, medir colesterol em casa, aparelho de colesterol, triglicérides, HDL, LDL, glicose, CardioMed",
       },
       { name: "robots", content: "index,follow" },
       { property: "og:site_name", content: brand.name },

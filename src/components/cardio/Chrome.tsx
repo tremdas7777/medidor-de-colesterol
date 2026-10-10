@@ -28,9 +28,9 @@ export function CardioHeader() {
             {brand.name}
           </Link>
           <nav aria-label="Principal">
-            <a href="/#problema">Por que ter um</a>
-            <a href="/#resultados">Resultados</a>
-            <a href="/#retorno">Retorno</a>
+            <a href="/#como">Como funciona</a>
+            <a href="/#para-quem">Para quem é</a>
+            <a href="/produto">O aparelho</a>
             <a href="/#kits">Kits</a>
             <Link to="/rastreio">Rastrear pedido</Link>
           </nav>
@@ -67,7 +67,7 @@ export function CardioFooter() {
                 <i />
                 {brand.name}
               </Link>
-              <p>Equipamentos de diagnóstico rápido para clínicas, farmácias e profissionais de saúde.</p>
+              <p>Saúde do coração acompanhada de perto, em casa.</p>
             </div>
             <div>
               <h5>Loja</h5>
@@ -101,9 +101,10 @@ export function CardioFooter() {
                 <br />
               </>
             )}
-            CardioChek® é marca registrada da PTS Diagnostics. Somos revendedores e não temos vínculo
-            oficial com o fabricante. Equipamento de uso profissional. Os resultados não substituem
-            avaliação médica.
+            CardioChek® é marca registrada da PTS Diagnostics. Somos revendedores e não temos
+            vínculo oficial com o fabricante. O CardioChek PA ajuda a acompanhar seus números e não
+            substitui consulta, diagnóstico ou tratamento médico. Leia as instruções de uso antes de
+            usar.
             {brand.anvisa && ` Registro ANVISA nº ${brand.anvisa}.`}
           </div>
         </div>

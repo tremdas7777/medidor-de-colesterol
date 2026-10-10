@@ -1,6 +1,6 @@
 import { brand } from "@/lib/brand";
 
-/** Kits: analisador avulso, Kit Inicial (25 tiras) e Kit Profissional (75 tiras). */
+/** Kits: só o aparelho, Kit Essencial (25 tiras) e Kit Família (75 tiras). */
 export type BundleId = "1" | "2" | "3";
 
 export const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -54,15 +54,15 @@ const PRODUCT_SUMMARY =
 export const bundles: Bundle[] = [
   {
     id: "1",
-    name: "Somente o analisador",
-    short: "Analisador",
+    name: "Só o aparelho",
+    short: "Só o aparelho",
     units: 1,
     strips: 0,
     price: 5240,
     compareAtPrice: 7490,
-    priceNote: "Para quem já tem tiras e insumos",
-    description: "Para quem já tem tiras e insumos",
-    audience: "Já tem tiras",
+    priceNote: "Para quem já tem tiras",
+    description: "Analisador, para quem já tem tiras e lancetas",
+    audience: "Já tem tiras em casa",
     checkoutProductName: brand.productName,
     checkoutProductDescription: `${brand.productName}: ${PRODUCT_SUMMARY}.`,
     checkoutUrl: "/checkout?plano=1",
@@ -79,16 +79,16 @@ export const bundles: Bundle[] = [
   },
   {
     id: "2",
-    name: "Kit Inicial",
-    short: "Kit Inicial",
+    name: "Kit Essencial",
+    short: "Kit Essencial",
     units: 1,
     strips: 25,
     price: 6490,
     compareAtPrice: 9990,
-    priceNote: "Analisador + 25 tiras + insumos",
-    description: "Analisador + 25 tiras de painel lipídico + insumos",
-    audience: "Para começar a atender",
-    checkoutProductName: `${brand.productName} — Kit Inicial`,
+    priceNote: "Aparelho + 25 tiras + lancetas",
+    description: "Aparelho + 25 tiras + lancetas e capilares",
+    audience: "Para você acompanhar",
+    checkoutProductName: `${brand.productName} — Kit Essencial`,
     checkoutProductDescription: `${brand.productName} com 25 tiras de painel lipídico, lancetas, capilares e solução controle: ${PRODUCT_SUMMARY}.`,
     checkoutUrl: "/checkout?plano=2",
     featured: true,
@@ -106,19 +106,19 @@ export const bundles: Bundle[] = [
   },
   {
     id: "3",
-    name: "Kit Profissional",
-    short: "Kit Profissional",
+    name: "Kit Família",
+    short: "Kit Família",
     units: 1,
     strips: 75,
     price: 8990,
     compareAtPrice: 14990,
-    priceNote: "Analisador + 75 tiras + maleta",
-    description: "Analisador + 75 tiras + maleta e insumos",
-    audience: "Alto volume de atendimentos",
-    checkoutProductName: `${brand.productName} — Kit Profissional`,
-    checkoutProductDescription: `${brand.productName} com 75 tiras de painel lipídico, maleta, lancetas, capilares e solução controle: ${PRODUCT_SUMMARY}.`,
+    priceNote: "Aparelho + 75 tiras + estojo",
+    description: "Aparelho + 75 tiras + estojo, para a casa toda",
+    audience: "Para a casa toda",
+    checkoutProductName: `${brand.productName} — Kit Família`,
+    checkoutProductDescription: `${brand.productName} com 75 tiras de painel lipídico, estojo, lancetas, capilares e solução controle: ${PRODUCT_SUMMARY}.`,
     checkoutUrl: "/checkout?plano=3",
-    badge: "Menor custo por teste",
+    badge: "Melhor custo por teste",
     includes: {
       lancetas: true,
       controle: true,
