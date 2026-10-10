@@ -4,12 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Loader2 } from "lucide-react";
 import { BrandLogo } from "@/components/site/BrandLogo";
-import {
-  getBundle,
-  isFreeShippingEligible,
-  FREE_SHIPPING_MIN,
-  FREE_SHIPPING_LABEL,
-} from "@/lib/bundles";
+import { getBundle, isFreeShippingEligible, FREE_SHIPPING_LABEL } from "@/lib/bundles";
 import { bundleIdFromSearch, planSearchSchema } from "@/lib/plan-search";
 import { createPixCharge, FRETES, getFrete, type FreteId } from "@/lib/pix.functions";
 import { checkoutTotals } from "@/lib/payment-pricing";
@@ -379,37 +374,30 @@ function Page() {
             onChange={(e) => setAddr({ ...addr, complemento: e.target.value })}
           />
           <p className="pt-2 text-base font-medium">Escolha o frete:</p>
-          <FreeShippingProgress
-            bundle={bundle}
-            subtotal={subtotal}
-            freteCost={FRETES.find((f) => f.id === "padrao")?.price}
-          />
-          {FRETES.map(({ id: v, name: t, eta: d, price }) => {
-            const locked = v === "gratis" && !freeEligible;
-            const p = locked ? "Indisponível" : price ? brl(price) : "Grátis";
-            return (
-              <button
-                key={v}
-                type="button"
-                disabled={locked}
-                onClick={() => setFrete(v)}
-                className={cn(
-                  "flex w-full items-center gap-4 rounded-lg border px-4 py-5 text-left",
-                  frete === v ? "border-[var(--ck-blue)] bg-muted/60" : "border-border",
-                  locked && "cursor-not-allowed opacity-50",
-                )}
-              >
-                <Radio on={frete === v} />
-                <span className="flex-1">
-                  <span className="block text-[13px] font-medium">{t}</span>
-                  <span className="text-[11px] text-muted-foreground">
-                    {locked ? `Só para pedidos a partir de ${brl(FREE_SHIPPING_MIN)}` : d}
+          <FreeShippingProgress bundle={bundle} subtotal={subtotal} />
+          {FRETES.filter((f) => f.id !== "gratis" || freeEligible).map(
+            ({ id: v, name: t, eta: d, price }) => {
+              const p = price ? brl(price) : "Grátis";
+              return (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setFrete(v)}
+                  className={cn(
+                    "flex w-full items-center gap-4 rounded-lg border px-4 py-5 text-left",
+                    frete === v ? "border-[var(--ck-blue)] bg-muted/60" : "border-border",
+                  )}
+                >
+                  <Radio on={frete === v} />
+                  <span className="flex-1">
+                    <span className="block text-[13px] font-medium">{t}</span>
+                    <span className="text-[11px] text-muted-foreground">{d}</span>
                   </span>
-                </span>
-                <span className="text-[13px] font-semibold">{p}</span>
-              </button>
-            );
-          })}
+                  <span className="text-[13px] font-semibold">{p}</span>
+                </button>
+              );
+            },
+          )}
           <GreenButton type="submit" disabled={!addrValid}>
             Ir Para Pagamento
           </GreenButton>
