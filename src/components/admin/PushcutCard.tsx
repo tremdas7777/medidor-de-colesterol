@@ -8,6 +8,26 @@ import { getPushcutStatus, savePushcutFn, testPushcutFn } from "@/lib/pushcut.fu
 
 type Status = { pending: string | null; paid: string | null };
 
+/** Traduz os erros do Pushcut (vêm em inglês, às vezes como JSON) para o que fazer. */
+function explainPushcutError(r: { status?: number | undefined; error?: string | undefined }) {
+  const raw = r.error ?? "";
+  let msg = raw;
+  try {
+    msg = String((JSON.parse(raw) as { error?: unknown }).error ?? raw);
+  } catch {
+    // texto puro
+  }
+  if (/invalid secret/i.test(msg))
+    return "a URL do webhook está errada ou incompleta. No app do Pushcut, abra a notificação, toque em Webhook, copie a URL inteira de novo e salve.";
+  if (/notification.*not found|not found/i.test(msg) || r.status === 404)
+    return "o Pushcut não encontrou essa notificação. Confira se ela existe no app com o mesmo nome que está no fim da URL, copie a URL de novo e salve.";
+  if (r.status === 401 || r.status === 403)
+    return "acesso recusado pelo Pushcut. Copie a URL do webhook de novo no app e salve.";
+  if (r.status === 429) return "muitas notificações seguidas. Espere um minuto e teste de novo.";
+  if (/abort/i.test(msg)) return "o Pushcut demorou para responder. Tente de novo.";
+  return msg || `erro ${r.status ?? ""}`;
+}
+
 /** Notificações de venda no celular (Pushcut): Pix gerado e Pix pago, com o valor. */
 export function PushcutCard({ password }: { password: string }) {
   const statusFn = useServerFn(getPushcutStatus);
@@ -60,9 +80,8 @@ export function PushcutCard({ password }: { password: string }) {
     run(`test-${kind}`, async () => {
       const r = await testFn({ data: { password, kind } });
       if (r.skipped) return "Cadastre um webhook do Pushcut antes de testar.";
-      return r.ok
-        ? "Notificação de teste enviada (R$ 99,90). Confira no celular."
-        : `O Pushcut não aceitou: ${r.error ?? `erro ${r.status ?? ""}`}`;
+      if (r.ok) return "Notificação de teste enviada (R$ 99,90). Confira no celular.";
+      return `O Pushcut não aceitou: ${explainPushcutError(r)}`;
     });
 
   const configured = !!(status?.pending || status?.paid);
