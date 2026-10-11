@@ -161,6 +161,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   // falhar, a loja abre com os preços de fábrica (e a cobrança não sai até o banco voltar).
   loader: () => getPrices().catch(() => null),
   staleTime: 60_000,
+  // Não recarrega os preços a cada navegação dentro do site (ex.: trocar de kit no checkout):
+  // a recarga podia recriar a página e apagar o que o cliente digitou. O servidor sempre
+  // recalcula o preço antes de gerar o Pix.
+  shouldReload: false,
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

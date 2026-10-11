@@ -68,6 +68,17 @@ const maskCep = (v: string) =>
     .replace(/(\d{5})(\d)/, "$1-$2");
 const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 type Step = 1 | 2 | 3;
+
+const DRAFT_KEY = "checkout_draft";
+/** Rascunho mais velho que isso é descartado. */
+const DRAFT_MAX_AGE_MS = 2 * 60 * 60 * 1000;
+type Draft = {
+  id: { name: string; email: string; cpf: string; phone: string };
+  addr: Addr;
+  bumps: BumpId[];
+  step: Step;
+  at: number;
+};
 type Addr = {
   cep: string;
   rua: string;
@@ -96,6 +107,34 @@ function Page() {
     uf: "",
   });
   const [bumps, setBumps] = useState<BumpId[]>([]);
+
+  // Rascunho do checkout nesta aba: se a página for recriada (troca de kit, recarregar),
+  // o cliente não precisa digitar tudo de novo. Apagado quando o Pix é gerado.
+  const restored = useRef(false);
+  useEffect(() => {
+    try {
+      const d = JSON.parse(sessionStorage.getItem(DRAFT_KEY) ?? "null") as Draft | null;
+      if (d && Date.now() - d.at < DRAFT_MAX_AGE_MS) {
+        setId(d.id);
+        setAddr(d.addr);
+        setBumps(d.bumps.filter((b) => ORDER_BUMPS.some((o) => o.id === b)));
+        setStep(d.step);
+      }
+    } catch {
+      // storage indisponível ou rascunho inválido: segue com o formulário vazio
+    }
+    restored.current = true;
+  }, []);
+  useEffect(() => {
+    if (!restored.current) return;
+    try {
+      const d: Draft = { id, addr, bumps, step, at: Date.now() };
+      sessionStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    } catch {
+      // storage indisponível
+    }
+  }, [id, addr, bumps, step]);
+
   const toggleBump = (id: BumpId, on: boolean) =>
     setBumps((cur) => (on ? [...cur.filter((b) => b !== id), id] : cur.filter((b) => b !== id)));
   // Frete grátis só a partir de FREE_SHIPPING_MIN em produtos (validado também no servidor).
@@ -224,6 +263,11 @@ function Page() {
   const mutation = useMutation({
     mutationFn: () => createFn({ data: orderPayload() }),
     onSuccess: (c) => {
+      try {
+        sessionStorage.removeItem(DRAFT_KEY);
+      } catch {
+        // storage indisponível
+      }
       savePixSession({
         ...sessionBase(),
         id: c.id,
