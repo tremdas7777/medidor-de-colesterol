@@ -9,6 +9,7 @@ import { upsellPrice } from "@/lib/upsell";
 import { isPaidStatus } from "@/lib/pix-status";
 import { fetchPixStatus } from "@/lib/pix-gateway.server";
 import { syncPricesFromDb } from "@/lib/prices.server";
+import { notifyPushcut, type PushcutResult } from "@/lib/pushcut.server";
 
 export type StoredCustomer = {
   name: string;
@@ -127,6 +128,12 @@ export async function reportPendingToUtmify(o: {
   ip?: string | null;
   createdAt: number;
 }): Promise<void> {
+  // Pushcut "Pix gerado" (com o valor), em paralelo com a UTMify.
+  const pushcutPending = notifyPushcut("pending", {
+    amountCents: o.amountCents,
+    label: o.bundleName,
+    orderId: o.id,
+  });
   const r = await sendUtmifyOrder({
     orderId: o.id,
     status: "waiting_payment",
@@ -151,7 +158,12 @@ export async function reportPendingToUtmify(o: {
     const db = await admin();
     await db
       .from("pix_orders")
-      .update({ report_result: { utmifyPending: { ...r, at: new Date().toISOString() } } })
+      .update({
+        report_result: {
+          utmifyPending: { ...r, at: new Date().toISOString() },
+          pushcutPending: await pushcutPending,
+        },
+      })
       .eq("id", o.id)
       .is("paid_reported_at", null);
   } catch (e) {
@@ -217,7 +229,20 @@ export async function reportPaidOnce(
     const c = o.customer as StoredCustomer;
     const productName = `${brand.productName} - ${o.bundle_name}`;
     // Canal que já confirmou o recebimento numa tentativa anterior não recebe de novo (sem duplicar venda).
-    const done = (o.report_result ?? {}) as { utmify?: { ok?: boolean }; meta?: { ok?: boolean } };
+    const done = (o.report_result ?? {}) as {
+      utmify?: { ok?: boolean };
+      meta?: { ok?: boolean };
+      pushcut?: PushcutResult;
+    };
+    // Pushcut "Venda aprovada" (com o valor): uma vez por pedido, mesmo se a UTMify/Meta forem
+    // reenviados numa nova tentativa.
+    const pushcut = done.pushcut?.ok
+      ? done.pushcut
+      : await notifyPushcut("paid", {
+          amountCents: amount,
+          label: o.bundle_name,
+          orderId: id,
+        });
     const utmify = done.utmify?.ok
       ? done.utmify
       : await sendUtmifyOrder({
@@ -292,7 +317,7 @@ export async function reportPaidOnce(
             });
     // O rastreio fica fora do allOk: é idempotente por external_id e um 422 não deve ser retentado.
     const allOk = utmify.ok && meta.ok;
-    console.log("reportPaidOnce", id, JSON.stringify({ utmify, meta, rastro }));
+    console.log("reportPaidOnce", id, JSON.stringify({ utmify, meta, rastro, pushcut }));
     // Guarda o resultado; se algo falhou, libera a trava para nova tentativa.
     await db
       .from("pix_orders")
@@ -302,6 +327,7 @@ export async function reportPaidOnce(
           utmify,
           meta,
           rastro,
+          pushcut,
           at: new Date().toISOString(),
         },
         ...(allOk ? {} : { paid_reported_at: null }),
