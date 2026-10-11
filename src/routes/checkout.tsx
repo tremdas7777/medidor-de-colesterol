@@ -117,7 +117,7 @@ function Page() {
   const freteOpt = getFrete(frete);
   const freteValue = freteOpt.price;
   const products = bundle.price + bumpsTotal(bumps);
-  // Só Pix (SagacePay ou PixGate): o servidor aplica a mesma regra de preço.
+  // Só Pix (SagacePay, PixGate ou MagicPay): o servidor aplica a mesma regra de preço.
   const pixT = checkoutTotals({ products, frete: freteValue });
   const pixTotal = pixT.total / 100;
   const payTotal = pixTotal;

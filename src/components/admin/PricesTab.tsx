@@ -128,7 +128,7 @@ export function PricesTab({ password }: { password: string }) {
       <div>
         <h2 className="text-lg font-semibold">Preços (ticket)</h2>
         <p className="text-sm text-muted-foreground">
-          O valor salvo aqui é o que a loja mostra e o que é cobrado no Pix (SagacePay ou PixGate).
+          O valor salvo aqui é o que a loja mostra e o que é cobrado no Pix (SagacePay, PixGate ou MagicPay).
           Pix já gerados continuam com o valor da hora em que foram criados. O preço "de" é o valor
           riscado; deixe vazio para não mostrar desconto.
         </p>

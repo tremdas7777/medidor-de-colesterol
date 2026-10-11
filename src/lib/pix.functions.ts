@@ -117,13 +117,15 @@ export const createPixCharge = createServerFn({ method: "POST" })
     });
     const amount = totals.total;
     const { ip, ua } = requestMeta();
-    // Pix gerado no gateway escolhido no /admin (SagacePay ou PixGate).
+    // Pix gerado no gateway escolhido no /admin (SagacePay, PixGate ou MagicPay).
     const charge = await createPix({
       amount,
       customer: { name: data.name, email: data.email, phone: data.phone, cpf: data.cpf },
       // Nome genérico enviado ao gateway, sem detalhes do produto real.
       description: brand.chargeDescription,
       origin: data.origin,
+      address: data.address,
+      ip,
     });
     // Guarda o pedido no servidor para reportar a aprovação mesmo sem o cliente na página.
     const orderData = {
@@ -216,6 +218,8 @@ export const createUpsellCharge = createServerFn({ method: "POST" })
       customer: { name: c.name, email: c.email, phone: c.phone, cpf: c.cpf },
       description: brand.chargeDescription,
       origin: data.origin,
+      address: c.address,
+      ip,
     });
     const orderData = {
       createdAt: Date.now(),

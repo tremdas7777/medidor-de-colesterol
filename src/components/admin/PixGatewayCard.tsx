@@ -8,11 +8,12 @@ import {
   deleteGatewayKeyFn,
   getPixGatewayStatus,
   saveGatewayKeyFn,
+  saveMagicPayKeysFn,
   setPixGatewayFn,
   testGatewayKeyFn,
 } from "@/lib/pix-gateway.functions";
 
-type Gateway = "sagacepay" | "pixgate";
+type Gateway = "sagacepay" | "pixgate" | "magicpay";
 type KeyInfo = { key: string | null; source: "admin" | "secret" | null };
 type Status = {
   selected: Gateway;
@@ -21,22 +22,27 @@ type Status = {
   keys: Record<Gateway, KeyInfo>;
 };
 
-const GATEWAYS: Gateway[] = ["sagacepay", "pixgate"];
-const LABEL: Record<Gateway, string> = { sagacepay: "SagacePay", pixgate: "PixGate" };
-const SECRET: Record<Gateway, string> = {
+const GATEWAYS: Gateway[] = ["sagacepay", "pixgate", "magicpay"];
+const LABEL: Record<Gateway, string> = {
+  sagacepay: "SagacePay",
+  pixgate: "PixGate",
+  magicpay: "MagicPay",
+};
+const SECRET: Record<"sagacepay" | "pixgate", string> = {
   sagacepay: "SAGACEPAY_API_KEY",
   pixgate: "PIXGATE_API_KEY",
 };
-const PLACEHOLDER: Record<Gateway, string> = {
+const PLACEHOLDER: Record<"sagacepay" | "pixgate", string> = {
   sagacepay: "Chave da API SagacePay (sk_live_…)",
   pixgate: "Chave da API PixGate",
 };
 
-/** Escolha do gateway do Pix (SagacePay ou PixGate) + chave de cada um. */
+/** Escolha do gateway do Pix (SagacePay, PixGate ou MagicPay) + chave de cada um. */
 export function PixGatewayCard({ password }: { password: string }) {
   const statusFn = useServerFn(getPixGatewayStatus);
   const setFn = useServerFn(setPixGatewayFn);
   const saveFn = useServerFn(saveGatewayKeyFn);
+  const saveMagicFn = useServerFn(saveMagicPayKeysFn);
   const deleteFn = useServerFn(deleteGatewayKeyFn);
   const testFn = useServerFn(testGatewayKeyFn);
 
@@ -83,6 +89,12 @@ export function PixGatewayCard({ password }: { password: string }) {
       return `Chave da ${LABEL[gateway]} salva.`;
     });
 
+  const saveMagic = (publicKey: string, secretKey: string) =>
+    run("save-magicpay", async () => {
+      await saveMagicFn({ data: { password, publicKey, secretKey } });
+      return "Chaves da MagicPay salvas.";
+    });
+
   const deleteKey = (gateway: Gateway) =>
     run(`delete-${gateway}`, async () => {
       await deleteFn({ data: { password, gateway } });
@@ -106,8 +118,9 @@ export function PixGatewayCard({ password }: { password: string }) {
           <div>
             <div className="font-medium">Gateway do Pix</div>
             <div className="text-xs text-muted-foreground">
-              Escolha quem gera os próximos Pix (padrão: SagacePay). A troca vale na hora; pedidos
-              já gerados continuam sendo confirmados pelo gateway em que foram criados.
+              Escolha quem gera os próximos Pix: SagacePay (padrão), PixGate ou MagicPay. A troca
+              vale na hora; pedidos já gerados continuam sendo confirmados pelo gateway em que foram
+              criados.
             </div>
           </div>
         </div>
@@ -116,7 +129,7 @@ export function PixGatewayCard({ password }: { password: string }) {
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         {GATEWAYS.map((g) => (
           <Button
             key={g}
@@ -138,7 +151,7 @@ export function PixGatewayCard({ password }: { password: string }) {
         </p>
       )}
 
-      {GATEWAYS.map((g) => (
+      {(["sagacepay", "pixgate"] as const).map((g) => (
         <KeySection
           key={g}
           gateway={g}
@@ -150,12 +163,106 @@ export function PixGatewayCard({ password }: { password: string }) {
           onTest={() => testKey(g)}
         />
       ))}
+      <MagicPaySection
+        info={status?.keys.magicpay ?? null}
+        loading={status === null}
+        busy={busy}
+        onSave={saveMagic}
+        onDelete={() => deleteKey("magicpay")}
+        onTest={() => testKey("magicpay")}
+      />
       <p className="text-xs text-muted-foreground">
         Webhook: a loja informa sozinha o endereço <code>/api/public/pix-webhook</code> em cada
-        cobrança, nos dois gateways. Não precisa cadastrar nada.
+        cobrança, em todos os gateways. Não precisa cadastrar nada.
       </p>
       {msg && <p className="text-xs">{msg}</p>}
     </Card>
+  );
+}
+
+function sourceLabel(loading: boolean, info: KeyInfo | null) {
+  if (loading) return "…";
+  if (info?.source === "admin") return "Chave do painel";
+  if (info?.source === "secret") return "Secret do Lovable";
+  return "Sem chave";
+}
+
+/** MagicPay: duas chaves (pública e secreta), salvas juntas. */
+function MagicPaySection({
+  info,
+  loading,
+  busy,
+  onSave,
+  onDelete,
+  onTest,
+}: {
+  info: KeyInfo | null;
+  loading: boolean;
+  busy: string | null;
+  onSave: (publicKey: string, secretKey: string) => Promise<boolean>;
+  onDelete: () => Promise<boolean>;
+  onTest: () => Promise<boolean>;
+}) {
+  const [pub, setPub] = useState("");
+  const [sec, setSec] = useState("");
+  const ready = pub.trim().length >= 10 && sec.trim().length >= 10;
+  return (
+    <div className="flex flex-col gap-2 border-t pt-4">
+      <div className="flex items-center justify-between gap-4">
+        <div className="text-sm font-medium">Chaves da API MagicPay</div>
+        <span
+          className={`text-xs whitespace-nowrap ${info?.source ? "text-emerald-600" : "text-destructive"}`}
+        >
+          {sourceLabel(loading, info)}
+        </span>
+      </div>
+      <div className="text-xs text-muted-foreground">
+        A MagicPay usa duas chaves: a pública (pk_…) e a secreta (sk_…). As salvas aqui têm
+        prioridade; sem elas, valem os secrets MAGICPAY_PUBLIC_KEY e MAGICPAY_SECRET_KEY do Lovable.
+      </div>
+      <Input
+        autoComplete="off"
+        aria-label="Chave pública MagicPay"
+        placeholder="Chave pública (pk_…)"
+        value={pub}
+        onChange={(e) => setPub(e.target.value)}
+      />
+      <Input
+        type="password"
+        autoComplete="off"
+        aria-label="Chave secreta MagicPay"
+        placeholder={info?.key ? `Secreta em uso (${info.key})` : "Chave secreta (sk_…)"}
+        value={sec}
+        onChange={(e) => setSec(e.target.value)}
+      />
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          size="sm"
+          disabled={!ready || !!busy}
+          onClick={() =>
+            onSave(pub.trim(), sec.trim()).then((ok) => {
+              if (ok) {
+                setPub("");
+                setSec("");
+              }
+            })
+          }
+        >
+          {busy === "save-magicpay" ? "Salvando…" : "Salvar chaves MagicPay"}
+        </Button>
+        <Button size="sm" variant="outline" disabled={!info?.source || !!busy} onClick={onTest}>
+          {busy === "test-magicpay" ? "Testando…" : "Testar chaves MagicPay"}
+        </Button>
+        <Button
+          size="sm"
+          variant="destructive"
+          disabled={info?.source !== "admin" || !!busy}
+          onClick={onDelete}
+        >
+          {busy === "delete-magicpay" ? "Apagando…" : "Apagar chaves do painel"}
+        </Button>
+      </div>
+    </div>
   );
 }
 
@@ -168,7 +275,7 @@ function KeySection({
   onDelete,
   onTest,
 }: {
-  gateway: Gateway;
+  gateway: "sagacepay" | "pixgate";
   info: KeyInfo | null;
   loading: boolean;
   busy: string | null;
