@@ -57,7 +57,6 @@ export const testPushcutFn = createServerFn({ method: "POST" })
     const { notifyPushcut } = await import("@/lib/pushcut.server");
     return notifyPushcut(data.kind, {
       amountCents: 9990,
-      label: "Teste do painel",
       orderId: "TESTE123",
     });
   });

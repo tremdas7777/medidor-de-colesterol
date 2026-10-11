@@ -15,17 +15,15 @@ describe("Pushcut", () => {
   it("a notificação leva o valor da venda", () => {
     const paid = pushcutMessage("paid", {
       amountCents: 9990,
-      label: "Kit Essencial",
       orderId: "mp_abcdef123456",
     });
     expect(paid.title).toBe("Venda aprovada: R$ 99,90");
     expect(paid.text).toContain("R$ 99,90");
-    expect(paid.text).toContain("Kit Essencial");
+    expect(paid.text).not.toMatch(/Kit|aparelho/);
     expect(paid.text).toContain("EF123456");
     expect(paid.input).toBe("99.90");
     const pending = pushcutMessage("pending", {
       amountCents: 6990,
-      label: "Só o aparelho",
       orderId: "x1",
     });
     expect(pending.title).toBe("Pix gerado: R$ 69,90");
@@ -41,8 +39,8 @@ describe("Pushcut", () => {
   it("manda venda paga para o webhook de venda paga e pendente para o de pendente", async () => {
     const fetchMock = vi.fn(async () => new Response("ok", { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
-    await notifyPushcut("paid", { amountCents: 9990, label: "Kit", orderId: "1" }, URLS);
-    await notifyPushcut("pending", { amountCents: 6990, label: "Kit", orderId: "2" }, URLS);
+    await notifyPushcut("paid", { amountCents: 9990, orderId: "1" }, URLS);
+    await notifyPushcut("pending", { amountCents: 6990, orderId: "2" }, URLS);
     expect(String((fetchMock.mock.calls[0] as unknown[])[0])).toBe(URLS.paid);
     expect(String((fetchMock.mock.calls[1] as unknown[])[0])).toBe(URLS.pending);
     const body = JSON.parse(
@@ -56,13 +54,13 @@ describe("Pushcut", () => {
     vi.stubGlobal("fetch", fetchMock);
     await notifyPushcut(
       "paid",
-      { amountCents: 100, label: "Kit", orderId: "1" },
+      { amountCents: 100, orderId: "1" },
       { pending: URLS.pending, paid: "" },
     );
     expect(String((fetchMock.mock.calls[0] as unknown[])[0])).toBe(URLS.pending);
     const r = await notifyPushcut(
       "paid",
-      { amountCents: 100, label: "Kit", orderId: "1" },
+      { amountCents: 100, orderId: "1" },
       { pending: "", paid: "" },
     );
     expect(r.skipped).toBeTruthy();
@@ -76,7 +74,7 @@ describe("Pushcut", () => {
         throw new Error("rede caiu");
       }),
     );
-    const r = await notifyPushcut("paid", { amountCents: 100, label: "Kit", orderId: "1" }, URLS);
+    const r = await notifyPushcut("paid", { amountCents: 100, orderId: "1" }, URLS);
     expect(r.ok).toBe(false);
   });
 });

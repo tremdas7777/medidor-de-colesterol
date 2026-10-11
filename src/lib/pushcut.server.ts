@@ -70,7 +70,7 @@ const urlFor = (urls: Record<PushcutKind, string>, kind: PushcutKind) =>
 /** Texto da notificação, sempre com o valor da venda. */
 export function pushcutMessage(
   kind: PushcutKind,
-  o: { amountCents: number; label: string; orderId: string },
+  o: { amountCents: number; orderId: string },
 ) {
   const value = brl(o.amountCents / 100);
   const order = o.orderId
@@ -81,8 +81,8 @@ export function pushcutMessage(
     title: kind === "paid" ? `Venda aprovada: ${value}` : `Pix gerado: ${value}`,
     text:
       kind === "paid"
-        ? `${value} · ${o.label} · pedido ${order}`
-        : `${value} aguardando pagamento · ${o.label} · pedido ${order}`,
+        ? `${value} · pedido ${order}`
+        : `${value} aguardando pagamento · pedido ${order}`,
     // Valor numérico (ex.: "99.90") para usar em automações do Pushcut.
     input: (o.amountCents / 100).toFixed(2),
   };
@@ -93,7 +93,7 @@ export type PushcutResult = { ok: boolean; skipped?: string; status?: number; er
 /** Envia a notificação. Nunca lança erro: falha no Pushcut não pode atrapalhar a venda. */
 export async function notifyPushcut(
   kind: PushcutKind,
-  o: { amountCents: number; label: string; orderId: string },
+  o: { amountCents: number; orderId: string },
   urls?: Record<PushcutKind, string>,
 ): Promise<PushcutResult> {
   try {

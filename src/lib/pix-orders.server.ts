@@ -131,7 +131,6 @@ export async function reportPendingToUtmify(o: {
   // Pushcut "Pix gerado" (com o valor), em paralelo com a UTMify.
   const pushcutPending = notifyPushcut("pending", {
     amountCents: o.amountCents,
-    label: o.bundleName,
     orderId: o.id,
   });
   const r = await sendUtmifyOrder({
@@ -240,7 +239,6 @@ export async function reportPaidOnce(
       ? done.pushcut
       : await notifyPushcut("paid", {
           amountCents: amount,
-          label: o.bundle_name,
           orderId: id,
         });
     const utmify = done.utmify?.ok
